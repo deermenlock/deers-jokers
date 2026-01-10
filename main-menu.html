@@ -3,22 +3,207 @@
 <head>
   <link rel="icon" type="image/png" href="WebIcon.png">
   <meta charset="UTF-8">
-  <title>Deer's Jokers - Main Menu</title>
+  <title>Deer's Jokers</title>
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
 
   <style>
+    section {
+  margin-bottom: 40px;
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(145deg, #76a387, rgba(255, 255, 255, 0.6));
+  backdrop-filter: blur(10px); /* frosted glass effect */
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
     body {
-      background: linear-gradient(135deg, #d7e2d6, #a3c1ad);
+      /* gradient background */
+      background: linear-gradient(135deg, #f8fcf7, #76a387);
       color: #2f3e3d;
       font-family: 'Montserrat', sans-serif;
       margin: 0;
       padding: 0;
+      display: flex; /* sidebar + content */
+    }
+
+    /* Sidebar styling */
+    .sidebar {
+      width: 200px;
+      background-color: #bfcec6;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: 10px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      text-align: left;
     }
+
+    .sidebar h3 {
+      margin-top: 0;
+      font-family: 'Baloo 2', cursive;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 10px;
+      background-color: #a3c1ad;
+      color: #2f3e3d;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .sidebar a:hover {
+      background-color: #8bb49b;
+    }
+
+    .sidebar a.coming-soon {
+      background-color: #d1d1d1;
+      color: #888888;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Highlight the current update */
+    .sidebar a.current {
+      outline: 3px solid #4a7c59;
+      border-radius: 8px;
+      background-color: #c4d8c4;
+      font-weight: 700;
+      box-shadow: 0 0 8px rgba(74,124,89,0.6);
+    }
+
+    .sidebar a.current:hover {
+      outline-color: #76a387;
+      box-shadow: 0 0 12px rgba(74,124,89,0.8);
+    }
+
+    /* Countdown timer at bottom */
+    #countdown {
+      margin-top: auto;
+      text-align: center;
+      padding: 25px;
+      background-color: #a3c1ad;
+      border-radius: 25px;
+      color: #2f3e3d;
+      font-weight: 600;
+    }
+    .falling-bars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto; /* allows clicks to pass through */
+  overflow: hidden;
+  z-index: 0; /* behind all content */
+  background: transparent;
+}
+.falling-bar {
+  position: absolute;
+  width: 5px;
+  height: 100px;
+  background: rgba(74,124,89,0.3);
+  border-radius: 2px;
+  cursor: grab;
+  box-shadow: 0 0 10px rgba(74,124,89,0.6);
+  transition: box-shadow 0.2s, background 0.2s; /* do NOT transition top/position */
+}
+
+
+
+@keyframes fall {
+  0% { transform: translateY(-120px); }
+  100% { transform: translateY(110vh); }
+}
+
+/* Right Sidebar */
+.right-sidebar {
+  width: 220px;
+  background-color: #bfcec6; /* match left sidebar */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0; /* fix to the right side */
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1); /* shadow on the left of panel */
+  text-align: left;
+  overflow-y: auto;
+}
+.right-sidebar {
+  width: 200px;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  border-radius: 0 0 0 0;
+  background: linear-gradient(to bottom, #4a7c59, #bfcec6, #a3c1ad);
+  background-size: 100% 300%; /* make it taller for smooth movement */
+  animation: gradientMove 10s ease-in-out infinite alternate;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 0% 100%; }
+}
+
+@keyframes riseGradient {
+  0% {
+    background-position: 0% 100%; /* start at bottom */
+  }
+  100% {
+    background-position: 0% 0%; /* move to top */
+  }
+}
+
+.right-sidebar h3 {
+  margin-top: 0;
+  font-family: 'Baloo 2', cursive;
+  font-size: 22px;
+  text-align: center;
+}
+
+.right-sidebar .stat-item {
+  display: block;
+  padding: 10px;
+  background-color: #a3c1ad;
+  color: #2f3e3d;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  pointer-events: none; /* make stats not clickable */
+}
+
+    /* Main content */
+main {
+  position: relative;                       /* normal flow inside body */
+  width: calc(100% - 440px);               /* subtract left + right sidebar widths */
+  max-width: 800px;                         /* optional max width for readability */
+  margin: 0 auto;                           /* center horizontally */
+  padding: 40px 20px;
+}
+
 
     header {
       background-color: #a3c1ad;
@@ -26,7 +211,7 @@
       text-align: center;
       width: 100%;
       border-radius: 12px;
-      margin-bottom: 40px;
+      margin-bottom: 20px;
     }
 
     header h1 {
@@ -36,15 +221,55 @@
       color: #2f3e3d;
     }
 
-    main {
-      max-width: 800px;
-      padding: 20px;
-      width: 100%;
+    header h2 {
+      font-size: 20px;
+      margin-top: 10px;
+      color: #2f3e3d;
     }
 
-    section {
-      margin-bottom: 40px;
+   section {
+  margin-bottom: 40px;
+  width: 100%;
+  text-align: center; /* center section content */
+  background-color: rgba(0, 0, 0, 0.05); /* very light dark overlay */
+  padding: 20px;
+  border-radius: 12px;
+}
+
+
+    section ul {
+      text-align: left;
+      padding-left: 20px;
+      display: inline-block;
+    }
+
+    h2 {
+      font-family: 'Baloo 2', cursive;
+      font-size: 32px;
+      margin-bottom: 15px;
+      color: #3e5c57;
+    }
+
+    li {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    img {
+      width: 100%;
+      max-width: 600px;
+      display: block;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    footer {
       text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #556b63;
+      width: 100%;
     }
 
     a {
@@ -58,18 +283,207 @@
   </style>
 </head>
 <body>
+<div class="falling-bars"></div>
 
-  <header>
-    <h1>Deer's Jokers</h1>
-  </header>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h3>Updates</h3>
+    <a class="coming-soon">2.3.0 (Coming Soon)</a>
+    <a href="index.html" class="current">2.2.0</a>
 
+
+    <!-- Countdown Timer -->
+    <div id="countdown">
+      Next Update In:<br>
+      <span id="timer">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Main content -->
   <main>
+    <header>
+      <h1>Deer's Jokers</h1>
+      <h2>Potion Update (2/2) [2.2.0]</h2>
+    </header>
+
     <section>
-      <h2>ReadMe</h2>
-      <p>Welcome to the Deer's Jokers mod! This page contains the main menu of the website. You can navigate to all updates, changelogs, and download links from here. Enjoy exploring the mod updates! 🎉</p>
-      <p><a href="index.html">Go to Latest Update (2.2.0)</a></p>
+      <h2>Changelog</h2>
+      <ul>
+        <h3>4 New Potion Jokers</h3>
+        <span style="font-size: 16px; color: #3e5c57;">Each one of them having their own special ability!🧪</span>
+        <img src="PotionsPreview.png" alt="PotionsPreview.png">
+
+        <h3>Joker^3</h3>
+        <span style="font-size: 16px; color: #3e5c57;">I wonder what it does🤔</span>
+        <img src="Joker3Preview.png" alt="Joker3Preview.png" style="width: 30%; height: auto; display: block; margin: 20px auto;">
+
+        <h3>Jokers Sprite Overhaul</h3>
+        <span style="font-size: 16px; color: #3e5c57;">If they weren't good enough already✏️</span>
+        <img src="JokersOverhaulPreview.png" alt="JokersOverhaulPreview.png" width="2940" height="456" style="display: block; margin: 20px auto; max-width: 100%; height: auto;">
+
+        <h3>Bug Fixes</h3>
+        <ul style="font-family: 'Montserrat', sans-serif; font-size: 16px; color: #2f3e3d;">
+          <li><strong>Orange Potion Bug:</strong> Fixed Orange Potion not granting the player Hand Size</li>
+          <li><strong>Omega Potion Bug:</strong> Fixed Omega Potion not granting the player Orange Potion's Hand Size</li>
+        </ul>
+      </ul>
     </section>
+
+    <section>
+      <h2>Download</h2>
+      <p><a href="#">[WIP] Click here to download the mod [WIP]</a></p>
+    </section>
+
+    <footer>
+      &copy; 2026 Deer's Jokers. All rights reserved.
+    </footer>
   </main>
+<!-- Right Stats Sidebar -->
+<div class="right-sidebar">
+  <h3>Mod Stats</h3>
+<a class="stat-item" href="#"><strong>Mod Age:</strong><br> <span id="mod-age">Calculating...</span></a>
+  <a class="stat-item" href="#"><strong>Jokers:</strong> <span id="joker-count">36</span></a>
+   <a class="stat-item" href="#"><strong>Enhancements:</strong> <span id="enhancement-count">1</span></a>
+    <a class="stat-item" href="#"><strong>Seals:</strong> <span id="seal-count">2</span></a>
+      <a class="stat-item" href="#"><strong>Tarots:</strong> <span id="tarot-count">2</span></a>
+        <a class="stat-item" href="#"><strong>Spectrals:</strong> <span id="spectral-count">2</span></a>
+           <a class="stat-item" href="#"><strong>Planets:</strong> <span id="planet-count">2</span></a>
+                      <a class="stat-item" href="#"><strong>Booster Packs:</strong> <span id="boosterpack-count">3</span></a>
+                                 <a class="stat-item" href="#"><strong>Decks:</strong> <span id="Deck-count">8</span></a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+  
+  // Set the date of the next update
+  const nextUpdate = Date.UTC(2026, 1, 1, 22, 0, 0); // Feb 1, 2026, 22:00:00 UTC
+  const timerEl = document.getElementById("timer");
+  const countdownEl = document.getElementById("countdown");
+
+  // Countdown logic
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = nextUpdate - now;
+
+    if (distance <= 0) {
+      timerEl.innerHTML = "Update Released!";
+      confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+      clearInterval(countdownInterval);
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    timerEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  const countdownInterval = setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // Make countdown clickable for confetti
+  countdownEl.style.cursor = "pointer"; // visually looks clickable
+  countdownEl.addEventListener("click", () => {
+    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+  });
+  // Mod Age Calculation
+const releaseDate = new Date('2025-07-24T21:10:00'); // first version release
+const modAgeEl = document.getElementById('mod-age');
+
+function updateModAge() {
+  const now = new Date();
+  const diff = now - releaseDate;
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+  modAgeEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+updateModAge();
+setInterval(updateModAge, 1000);
+const barsContainer = document.querySelector('.falling-bars');
+const NUM_BARS = 30;
+const bars = [];
+
+// create bars
+for (let i = 0; i < NUM_BARS; i++) {
+  const bar = document.createElement('div');
+  bar.classList.add('falling-bar');
+
+  bar.x = Math.random() * window.innerWidth;
+  bar.y = Math.random() * window.innerHeight;
+  bar.speed = 50 + Math.random() * 30; // pixels per second
+
+  bar.isDragging = false;
+
+  bar.style.left = bar.x + 'px';
+  bar.style.top = bar.y + 'px';
+  bar.style.cursor = 'grab';
+  bar.style.boxShadow = '0 0 10px rgba(74,124,89,0.6)';
+
+  // drag events
+  bar.addEventListener('mousedown', (e) => {
+    bar.isDragging = true;
+    bar.offsetX = e.clientX - bar.x;
+    bar.offsetY = e.clientY - bar.y;
+    bar.style.cursor = 'grabbing';
+    bar.style.boxShadow = '0 0 20px rgba(255,200,0,0.9)';
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (bar.isDragging) {
+      bar.x = e.clientX - bar.offsetX;
+      bar.y = e.clientY - bar.offsetY;
+      bar.style.left = bar.x + 'px';
+      bar.style.top = bar.y + 'px';
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (bar.isDragging) {
+      bar.isDragging = false;
+      bar.style.cursor = 'grab';
+      bar.style.boxShadow = '0 0 10px rgba(74,124,89,0.6)';
+    }
+  });
+
+  barsContainer.appendChild(bar);
+  bars.push(bar);
+}
+
+// animation loop using deltaTime for perfectly linear movement
+let lastTime = performance.now();
+function animateBars(time) {
+  const delta = (time - lastTime) / 1000; // seconds since last frame
+  lastTime = time;
+
+  for (const bar of bars) {
+    if (!bar.isDragging) {
+      bar.y += bar.speed * delta; // pixels per second
+      if (bar.y > window.innerHeight) {
+        bar.y = -100;
+        bar.x = Math.random() * window.innerWidth;
+        bar.style.left = bar.x + 'px';
+      }
+      bar.style.top = bar.y + 'px';
+    }
+  }
+
+  requestAnimationFrame(animateBars);
+}
+
+requestAnimationFrame(animateBars);
+
+
+
+
+</script>
+
 
 </body>
 </html>
