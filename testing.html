@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="WebIcon.png">
+  <meta charset="UTF-8">
+  <title>Deer's Jokers - Testing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+
+  <style>
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: linear-gradient(135deg, #0d1b2a, #1b2735);
+  background-attachment: fixed;
+  margin: 0;
+  /* overflow: hidden;  ← remove this */
+  color: #ccc;
+}
+
+
+    .sidebar {
+      width: 200px;
+      background-color: #1c2a36;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+    }
+
+    .sidebar h3 {
+      margin-top: 0;
+      font-family: 'Baloo 2', cursive;
+      font-size: 22px;
+      text-align: center;
+      color: #e0e0e0;
+    }
+
+    .sidebar a {
+      padding: 10px;
+      background-color: #2c3a45;
+      color: #e0e0e0;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .sidebar a.current {
+      outline: 3px solid #4a7c59;
+      background-color: #3a5560;
+      font-weight: 700;
+      box-shadow: 0 0 8px rgba(74,124,89,0.6);
+    }
+
+    .sidebar a.coming-soon {
+      background-color: #555555;
+      color: #888;
+      pointer-events: none;
+    }
+
+    #countdown {
+      margin-top: auto;
+      text-align: center;
+      padding: 25px;
+      background-color: #2c3a45;
+      border-radius: 25px;
+      color: #e0e0e0;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    main {
+      margin-left: 200px;
+      padding: 40px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      background-color: #2c3a45;
+      padding: 40px 20px;
+      width: 500px;
+      max-width: 90%;
+      margin: 0 auto 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: 'Baloo 2', cursive;
+      font-size: 48px;
+      margin: 0;
+      color: #e0e0e0;
+    }
+
+    header .sub-text {
+      font-family: "Edu NSW ACT Cursive", cursive;
+      font-size: 25px;
+      color: #cedaf1;
+      margin-top: 5px;
+    }
+
+   section {
+  margin: 0 auto 40px auto; /* center horizontally */
+  width: 1000px;             /* fixed width like header */
+  max-width: 90%;           /* never go wider than screen */
+  text-align: center;
+  background: linear-gradient(145deg, #3b4a50, rgba(0, 0, 0, 0.5));
+  backdrop-filter: blur(8px);
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    /* Stars */
+    .stars-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0;
+      box-shadow: 0 0 4px white;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+      100% { opacity: 0; transform: scale(1); }
+    }
+
+    .graph-container {
+      width: 900px;
+      max-width: 100%;
+      height: 350px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="stars-container" id="stars-container"></div>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h3>Menu</h3>
+  <a href="testing.html">Testing</a>
+  <a class="coming-soon">2.3.0 (Coming Soon)</a>
+  <a href="index.html" class="current">2.2.0</a>
+
+  <div id="countdown">
+    Next Update In:<br>
+    <span id="timer">Loading...</span>
+  </div>
+</div>
+
+<!-- Main -->
+<main>
+  <header>
+    <h1>Deer's Jokers</h1>
+    <div class="sub-text">~Testing~</div>
+  </header>
+
+  <section>
+    <h2>Jokers Added per Update</h2>
+    <div class="graph-container">
+      <canvas id="jokerGraph"></canvas>
+    </div>
+  </section>
+<section>
+  <h2>Unused Assets</h2>
+  <div class="graph-container">
+    <img src="UnusedAssets.png" 
+         alt="Unused Assets Placeholder" 
+         style="width: 100%; height: 100%; object-fit: contain; border: 2px dashed #4a7c59; border-radius: 12px; display: block; margin: 0 auto;">
+  </div>
+</section>
+
+  <footer>
+    &copy; 2026 Deer's Jokers. All rights reserved.
+  </footer>
+</main>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+  const nextUpdate = Date.UTC(2026, 1, 1, 22, 0, 0);
+  const timerEl = document.getElementById("timer");
+  const countdownEl = document.getElementById("countdown");
+
+  countdownEl.addEventListener("click", () => {
+    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+  });
+
+  function updateCountdown() {
+    const now = Date.now();
+    const diff = nextUpdate - now;
+    if (diff <= 0) {
+      timerEl.textContent = "Update Released!";
+      return;
+    }
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+    timerEl.textContent = `${d}d ${h}h ${m}m ${s}s`;
+  }
+
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // Stars
+  const starsContainer = document.getElementById('stars-container');
+  const STAR_COUNT = 80;
+  const stars = [];
+
+  for (let i = 0; i < STAR_COUNT; i++) {
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.style.top = Math.random() * window.innerHeight + 'px';
+    star.style.left = Math.random() * window.innerWidth + 'px';
+    starsContainer.appendChild(star);
+    stars.push(star);
+
+    function twinkleStar() {
+      star.style.animation = `twinkle 1s linear forwards`;
+      setTimeout(() => {
+        star.style.animation = '';
+        setTimeout(twinkleStar, Math.random() * 4000 + 1000);
+      }, 1000);
+    }
+
+    twinkleStar();
+  }
+
+  function animateStars() {
+    for (const star of stars) {
+      let top = parseFloat(star.style.top);
+      top += 0.1;
+      if (top > window.innerHeight) {
+        top = 0;
+        star.style.left = Math.random() * window.innerWidth + 'px';
+      }
+      star.style.top = top + 'px';
+    }
+    requestAnimationFrame(animateStars);
+  }
+
+  animateStars();
+</script>
+<script>
+  const ctx = document.getElementById('jokerGraph').getContext('2d');
+  const jokerGraph = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['2.0', '2.1', '2.2', '2.3', '3.0'],
+      datasets: [{
+        label: 'Total Jokers in Mod',
+        data: [27, 31, 36, null, null],
+        fill: true,
+        borderColor: '#76a387',
+        backgroundColor: 'rgba(118, 163, 135, 0.2)',
+        tension: 0.3,
+        pointBackgroundColor: '#4a7c59',
+        pointRadius: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: false,
+          title: { display: true, text: 'Number of Jokers', color: '#ccc' },
+          ticks: { color: '#ccc' },
+          grid: { color: 'rgba(255,255,255,0.1)' }
+        },
+        x: {
+          title: { display: true, text: 'Update Version', color: '#ccc' },
+          ticks: { color: '#ccc' },
+          grid: { color: 'rgba(255,255,255,0.1)' }
+        }
+      },
+      plugins: { legend: { labels: { color: '#ccc' } } }
+    }
+  });
+</script>
+</body>
+</html>
