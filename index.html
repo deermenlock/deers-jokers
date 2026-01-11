@@ -9,23 +9,236 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
 
   <style>
-    /* GENERAL STYLES */
+    section {
+  margin-bottom: 40px;
+  width: 100%;
+  text-align: center;
+  background: linear-gradient(145deg, #76a387, rgba(255, 255, 255, 0.6));
+  backdrop-filter: blur(10px); /* frosted glass effect */
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
     body {
+      /* gradient background */
       background: linear-gradient(135deg, #f8fcf7, #76a387);
       color: #2f3e3d;
       font-family: 'Montserrat', sans-serif;
       margin: 0;
       padding: 0;
-      display: flex;
+      display: flex; /* sidebar + content */
     }
 
-    main {
-      position: relative;
-      width: calc(100% - 440px); /* left + right sidebars */
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 40px 20px;
+    /* Sidebar styling */
+    .sidebar {
+      width: 200px;
+      background-color: #bfcec6;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      text-align: left;
     }
+
+    .sidebar h3 {
+      margin-top: 0;
+      font-family: 'Baloo 2', cursive;
+      font-size: 22px;
+      text-align: center;
+        color: #2f3e3d;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 10px;
+      background-color: #a3c1ad;
+      color: #2f3e3d;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .sidebar a:hover {
+      background-color: #8bb49b;
+    }
+
+    .sidebar a.coming-soon {
+      background-color: #d1d1d1;
+      color: #888888;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    /* Highlight the current update */
+    .sidebar a.current {
+      outline: 3px solid #4a7c59;
+      border-radius: 8px;
+      background-color: #c4d8c4;
+      font-weight: 700;
+      box-shadow: 0 0 8px rgba(74,124,89,0.6);
+    }
+
+    .sidebar a.current:hover {
+      outline-color: #76a387;
+      box-shadow: 0 0 12px rgba(74,124,89,0.8);
+    }
+
+    /* Countdown timer at bottom */
+    #countdown {
+      margin-top: auto;
+      text-align: center;
+      padding: 25px;
+      background-color: #a3c1ad;
+      border-radius: 25px;
+      color: #2f3e3d;
+      font-weight: 600;
+    }
+    .falling-bars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto; /* allows clicks to pass through */
+  overflow: hidden;
+  z-index: 0; /* behind all content */
+  background: transparent;
+}
+.falling-bar {
+  position: absolute;
+  width: 5px;
+  height: 100px;
+  background: rgba(74,124,89,0.3);
+  border-radius: 2px;
+  cursor: grab;
+  box-shadow: 0 0 10px rgba(74,124,89,0.6);
+  transition: box-shadow 0.2s, background 0.2s; /* do NOT transition top/position */
+}
+
+
+
+@keyframes fall {
+  0% { transform: translateY(-120px); }
+  100% { transform: translateY(110vh); }
+}
+
+/* Right Sidebar */
+.right-sidebar {
+  width: 220px;
+  background-color: #bfcec6; /* match left sidebar */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  right: 0; /* fix to the right side */
+  box-shadow: -2px 0 5px rgba(0,0,0,0.1); /* shadow on the left of panel */
+  text-align: left;
+  overflow-y: auto;
+}
+.right-sidebar {
+  width: 200px;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  border-radius: 0 0 0 0;
+  background: linear-gradient(to bottom, #4a7c59, #bfcec6, #a3c1ad);
+  background-size: 100% 300%; /* make it taller for smooth movement */
+  animation: gradientMove 10s ease-in-out infinite alternate;
+}
+.changelog-img {
+  width: 100%;
+  max-width: 600px;
+  display: block;
+  margin: 20px auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer; /* add this */
+}
+
+
+.changelog-img:hover {
+  transform: scale(1.05); /* slightly bigger */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+.changelog-img-small {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.changelog-img-small:hover {
+  transform: scale(1.05); /* slightly bigger than 30% */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+.changelog-img-large {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.changelog-img-large:hover {
+  transform: scale(1.03); /* slightly larger than normal */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 0% 100%; }
+}
+
+@keyframes riseGradient {
+  0% {
+    background-position: 0% 100%; /* start at bottom */
+  }
+  100% {
+    background-position: 0% 0%; /* move to top */
+  }
+}
+
+.right-sidebar h3 {
+  margin-top: 0;
+  font-family: 'Baloo 2', cursive;
+  font-size: 22px;
+  text-align: center;
+}
+
+.right-sidebar .stat-item {
+  display: block;
+  padding: 10px;
+  background-color: #a3c1ad;
+  color: #2f3e3d;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  pointer-events: none; /* make stats not clickable */
+}
+
+    /* Main content */
+main {
+  position: relative;                       /* normal flow inside body */
+  width: calc(100% - 440px);               /* subtract left + right sidebar widths */
+  max-width: 800px;                         /* optional max width for readability */
+  margin: 0 auto;                           /* center horizontally */
+  padding: 40px 20px;
+}
+
 
     header {
       background-color: #a3c1ad;
@@ -49,22 +262,15 @@
       color: #2f3e3d;
     }
 
-    section {
-      margin-bottom: 40px;
-      width: 100%;
-      text-align: center;
-      background: linear-gradient(145deg, #76a387, rgba(255,255,255,0.6));
-      backdrop-filter: blur(10px);
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+   section {
+  margin-bottom: 40px;
+  width: 100%;
+  text-align: center; /* center section content */
+  background-color: rgba(0, 0, 0, 0.05); /* very light dark overlay */
+  padding: 20px;
+  border-radius: 12px;
+}
 
-    section:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
-    }
 
     section ul {
       text-align: left;
@@ -91,11 +297,6 @@
       margin: 20px auto;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-    }
-
-    img:hover {
-      transform: scale(1.05);
     }
 
     footer {
@@ -114,232 +315,27 @@
     a:hover {
       text-decoration: underline;
     }
-
-    /* LEFT SIDEBAR */
-    .sidebar {
-      width: 200px;
-      background-color: #bfcec6;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-      text-align: left;
-      z-index: 10;
-    }
-
-    .sidebar h3 {
-      margin-top: 0;
-      font-family: 'Baloo 2', cursive;
-      font-size: 22px;
-      text-align: center;
-    }
-
-    .sidebar a {
-      display: block;
-      padding: 10px;
-      background-color: #a3c1ad;
-      color: #2f3e3d;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      text-align: left;
-    }
-
-    .sidebar a:hover {
-      background-color: #8bb49b;
-    }
-
-    .sidebar a.coming-soon {
-      background-color: #d1d1d1;
-      color: #888888;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-
-    .sidebar a.current {
-      outline: 3px solid #4a7c59;
-      border-radius: 8px;
-      background-color: #c4d8c4;
-      font-weight: 700;
-      box-shadow: 0 0 8px rgba(74,124,89,0.6);
-    }
-
-    .sidebar a.current:hover {
-      outline-color: #76a387;
-      box-shadow: 0 0 12px rgba(74,124,89,0.8);
-    }
-
-    #countdown {
-      margin-top: auto;
-      text-align: center;
-      padding: 25px;
-      background-color: #a3c1ad;
-      border-radius: 25px;
-      color: #2f3e3d;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    /* RIGHT SIDEBAR */
-    .right-sidebar {
-      width: 200px;
-      padding: 20px;
-      position: fixed;
-      top: 0;
-      right: 0;
-      height: 100vh;
-      border-radius: 0 0 0 0;
-      background: linear-gradient(to bottom, #4a7c59, #bfcec6, #a3c1ad);
-      background-size: 100% 300%;
-      animation: gradientMove 10s ease-in-out infinite alternate;
-      z-index: 10;
-    }
-
-    @keyframes gradientMove {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 0% 100%; }
-    }
-
-    .right-sidebar h3 {
-      margin-top: 0;
-      font-family: 'Baloo 2', cursive;
-      font-size: 22px;
-      text-align: center;
-    }
-
-    .right-sidebar .stat-item {
-      display: block;
-      padding: 10px;
-      background-color: #a3c1ad;
-      color: #2f3e3d;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      pointer-events: none;
-    }
-
-    /* FALLING BARS */
-    .falling-bars {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: auto;
-      overflow: hidden;
-      z-index: 0;
-      background: transparent;
-    }
-
-    .falling-bar {
-      position: absolute;
-      width: 5px;
-      height: 100px;
-      background: rgba(74,124,89,0.3);
-      border-radius: 2px;
-      cursor: grab;
-      box-shadow: 0 0 10px rgba(74,124,89,0.6);
-      transition: box-shadow 0.2s, background 0.2s;
-    }
-
-    /* MOD ICON (ADMIN PANEL TRIGGER) */
-    #mod-icon {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      width: 50px;
-      height: 50px;
-      background: url('WebIcon.png') no-repeat center center;
-      background-size: cover;
-      border-radius: 10px;
-      cursor: pointer;
-      z-index: 100;
-      border: 2px solid #4a7c59;
-    }
-
-    /* ADMIN PANEL */
-    #admin-panel {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 400px;
-      background-color: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-      z-index: 200;
-      overflow-y: auto;
-      max-height: 80vh;
-    }
-
-    #admin-panel h2 {
-      margin-top: 0;
-      text-align: center;
-      font-family: 'Baloo 2', cursive;
-      font-size: 24px;
-      margin-bottom: 15px;
-    }
-
-    .counter-control {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .counter-control button {
-      padding: 5px 10px;
-      font-size: 14px;
-      border-radius: 6px;
-      border: 1px solid #4a7c59;
-      background-color: #a3c1ad;
-      cursor: pointer;
-    }
-
-    .counter-control input {
-      width: 60px;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    #admin-close {
-      display: block;
-      margin: 10px auto 0 auto;
-      padding: 5px 10px;
-      background-color: #bfcec6;
-      border: 1px solid #4a7c59;
-      border-radius: 6px;
-      cursor: pointer;
-    }
   </style>
 </head>
-
 <body>
-  <div class="falling-bars"></div>
+<div class="falling-bars"></div>
 
-  <!-- MOD ICON -->
-  <div id="mod-icon"></div>
+  <!-- Sidebar -->
+<div class="sidebar">
+  <h3>Menu</h3>
+  <a href="testing.html">Testing</a>
+  <a class="coming-soon">2.3.0 (Coming Soon)</a>
+  <a href="index.html" class="current">2.2.0</a>
+  
 
-  <!-- ADMIN PANEL -->
-  <div id="admin-panel">
-    <h2>Admin Panel</h2>
-    <div id="admin-counters"></div>
-    <button id="admin-close">Close</button>
+  <!-- Countdown Timer -->
+  <div id="countdown">
+    Next Update In:<br>
+    <span id="timer">Loading...</span>
   </div>
+</div>
 
-  <!-- LEFT SIDEBAR -->
-  <div class="sidebar">
-    <h3>Updates</h3>
-    <a class="coming-soon">2.3.0 (Coming Soon)</a>
-    <a href="index.html" class="current">2.2.0</a>
+
 
     <!-- Countdown Timer -->
     <div id="countdown">
@@ -348,7 +344,7 @@
     </div>
   </div>
 
-  <!-- MAIN CONTENT -->
+  <!-- Main content -->
   <main>
     <header>
       <h1>Deer's Jokers</h1>
@@ -357,21 +353,32 @@
 
     <section>
       <h2>Changelog</h2>
+      <hr style="border: 1px solid #4c634c; margin: 20px 0;">
       <ul>
         <h3>4 New Potion Jokers</h3>
-        <span style="font-size:16px; color:#3e5c57;">Each one of them having their own special ability!🧪</span>
-        <img src="PotionsPreview.png" alt="PotionsPreview.png">
-
+        <span style="font-size: 16px; color: #3e5c57;">Each one of them having their own special ability!🧪</span>
+<img src="PotionsPreview.png" alt="PotionsPreview.png" class="changelog-img">
+<hr style="border: 1px solid #4c634c; margin: 20px 0;">
         <h3>Joker^3</h3>
-        <span style="font-size:16px; color:#3e5c57;">I wonder what it does🤔</span>
-        <img src="Joker3Preview.png" alt="Joker3Preview.png" style="width:30%; height:auto; display:block; margin:20px auto;">
+        <span style="font-size: 16px; color: #3e5c57;">I wonder what it does🤔</span>
+      <img src="Joker3Preview.png" 
+     alt="Joker3Preview.png" 
+     class="changelog-img-small" 
+     style="width: 30%; height: auto; display: block; margin: 20px auto;">
+
+        <hr style="border: 1px solid #4c634c; margin: 20px 0;">
 
         <h3>Jokers Sprite Overhaul</h3>
-        <span style="font-size:16px; color:#3e5c57;">If they weren't good enough already✏️</span>
-        <img src="JokersOverhaulPreview.png" alt="JokersOverhaulPreview.png" width="2940" height="456" style="display:block; margin:20px auto; max-width:100%; height:auto;">
+        <span style="font-size: 16px; color: #3e5c57;">If they weren't good enough already✏️</span>
+       <img src="JokersOverhaulPreview.png" 
+     alt="JokersOverhaulPreview.png" 
+     class="changelog-img-large" 
+     style="display: block; margin: 20px auto; max-width: 100%; height: auto;">
+
+        <hr style="border: 1px solid #4c634c; margin: 20px 0;">
 
         <h3>Bug Fixes</h3>
-        <ul style="font-family:'Montserrat', sans-serif; font-size:16px; color:#2f3e3d;">
+        <ul style="font-family: 'Montserrat', sans-serif; font-size: 16px; color: #2f3e3d;">
           <li><strong>Orange Potion Bug:</strong> Fixed Orange Potion not granting the player Hand Size</li>
           <li><strong>Omega Potion Bug:</strong> Fixed Omega Potion not granting the player Orange Potion's Hand Size</li>
         </ul>
@@ -387,124 +394,260 @@
       &copy; 2026 Deer's Jokers. All rights reserved.
     </footer>
   </main>
+<!-- Right Stats Sidebar -->
+<div class="right-sidebar">
+  <h3>Mod Stats</h3>
+  <a class="stat-item" href="#"><strong>Mod Age:</strong><br> <span id="mod-age">Calculating...</span></a>
+  <a class="stat-item" href="#"><strong>Jokers:</strong> <span class="stat-number" id="joker-count" data-target="36">0</span></a>
+  <a class="stat-item" href="#"><strong>Enhancements:</strong> <span class="stat-number" id="enhancement-count" data-target="1">0</span></a>
+  <a class="stat-item" href="#"><strong>Seals:</strong> <span class="stat-number" id="seal-count" data-target="2">0</span></a>
+  <a class="stat-item" href="#"><strong>Tarots:</strong> <span class="stat-number" id="tarot-count" data-target="2">0</span></a>
+  <a class="stat-item" href="#"><strong>Spectrals:</strong> <span class="stat-number" id="spectral-count" data-target="2">0</span></a>
+  <a class="stat-item" href="#"><strong>Planets:</strong> <span class="stat-number" id="planet-count" data-target="2">0</span></a>
+  <a class="stat-item" href="#"><strong>Booster Packs:</strong> <span class="stat-number" id="boosterpack-count" data-target="3">0</span></a>
+  <a class="stat-item" href="#"><strong>Decks:</strong> <span class="stat-number" id="Deck-count" data-target="8">0</span></a>
+</div>
 
-  <!-- RIGHT SIDEBAR -->
-  <div class="right-sidebar">
-    <h3>Mod Stats</h3>
-    <a class="stat-item" href="#"><strong>Mod Age:</strong><br> <span id="mod-age">Calculating...</span></a>
-    <a class="stat-item" href="#"><strong>Jokers:</strong> <span id="joker-count">36</span></a>
-    <a class="stat-item" href="#"><strong>Enhancements:</strong> <span id="enhancement-count">1</span></a>
-    <a class="stat-item" href="#"><strong>Seals:</strong> <span id="seal-count">2</span></a>
-    <a class="stat-item" href="#"><strong>Tarots:</strong> <span id="tarot-count">2</span></a>
-    <a class="stat-item" href="#"><strong>Spectrals:</strong> <span id="spectral-count">2</span></a>
-    <a class="stat-item" href="#"><strong>Planets:</strong> <span id="planet-count">2</span></a>
-    <a class="stat-item" href="#"><strong>Booster Packs:</strong> <span id="boosterpack-count">3</span></a>
-    <a class="stat-item" href="#"><strong>Decks:</strong> <span id="Deck-count">8</span></a>
-  </div>
+</div>
+<div class="stat">
+  <span class="stat-number" data-target="150">150</span>
+  <p>Total Jokers</p>
+</div>
+<div class="stat">
+  <span class="stat-number" data-target="42">42</span>
+  <p>Active Users</p>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <script>
-    // =======================
-    // COUNTDOWN
-    // =======================
-    const nextUpdate = Date.UTC(2026,1,1,22,0,0);
-    const timerEl = document.getElementById("timer");
-    const countdownEl = document.getElementById("countdown");
 
-    function updateCountdown(){
-      const now = new Date().getTime();
-      const distance = nextUpdate - now;
-      if(distance<=0){
-        timerEl.innerHTML="Update Released!";
-        confetti({particleCount:200, spread:100, origin:{y:0.6}});
-        clearInterval(countdownInterval);
-        return;
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+  
+  // Set the date of the next update
+  const nextUpdate = Date.UTC(2026, 1, 1, 22, 0, 0); // Feb 1, 2026, 22:00:00 UTC
+  const timerEl = document.getElementById("timer");
+  const countdownEl = document.getElementById("countdown");
+
+  // Countdown logic
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = nextUpdate - now;
+
+    if (distance <= 0) {
+      timerEl.innerHTML = "Update Released!";
+      confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+      clearInterval(countdownInterval);
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    timerEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  const countdownInterval = setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // Make countdown clickable for confetti
+  countdownEl.style.cursor = "pointer"; // visually looks clickable
+  countdownEl.addEventListener("click", () => {
+    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+  });
+// Mod Age Calculation with animated counter
+const releaseDate = new Date('2025-07-24T21:10:00'); // first version release
+const modAgeEl = document.getElementById('mod-age');
+
+function animateModAge() {
+  const now = new Date();
+  const totalSeconds = Math.floor((now - releaseDate) / 1000); // total seconds since release
+  const duration = 2000; // 2 seconds animation
+  const startTime = performance.now();
+
+  function updateCounter(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+
+    // cubic ease-out
+    const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+    let currentSeconds = Math.floor(easedProgress * totalSeconds);
+
+    // convert seconds to Xd Xh Xm Xs
+    const days = Math.floor(currentSeconds / (24 * 3600));
+    currentSeconds %= 24 * 3600;
+    const hours = Math.floor(currentSeconds / 3600);
+    currentSeconds %= 3600;
+    const minutes = Math.floor(currentSeconds / 60);
+    const seconds = currentSeconds % 60;
+
+    modAgeEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+    if (progress < 1) {
+      requestAnimationFrame(updateCounter);
+    }
+  }
+
+  requestAnimationFrame(updateCounter);
+}
+
+animateModAge();
+
+const barsContainer = document.querySelector('.falling-bars');
+const NUM_BARS = 30;
+const bars = [];
+
+// create bars
+for (let i = 0; i < NUM_BARS; i++) {
+  const bar = document.createElement('div');
+  bar.classList.add('falling-bar');
+
+  bar.x = Math.random() * window.innerWidth;
+  bar.y = Math.random() * window.innerHeight;
+  bar.speed = 50 + Math.random() * 30; // pixels per second
+
+  bar.isDragging = false;
+
+// existing code
+bar.style.left = bar.x + 'px';
+bar.style.top = bar.y + 'px';
+bar.style.cursor = 'grab';
+bar.style.boxShadow = '0 0 10px #4a7c59'; // normal glow in hex
+bar.style.background = '#4a7c5980'; // normal color with alpha in hex (80 = ~50% opacity)
+
+// HOVER EFFECT
+bar.addEventListener('mouseenter', () => {
+  bar.style.boxShadow = '0 0 20px #86a86d'; // bright glow
+  bar.style.background = '#ffffc080'; // lighter color with opacity
+});
+
+bar.addEventListener('mouseleave', () => {
+  bar.style.boxShadow = '0 0 10px #4a7c59'; // back to normal
+  bar.style.background = '#4a7c5980'; // back to normal
+});
+
+  // drag events
+  bar.addEventListener('mousedown', (e) => {
+    bar.isDragging = true;
+    bar.offsetX = e.clientX - bar.x;
+    bar.offsetY = e.clientY - bar.y;
+    bar.style.cursor = 'grabbing';
+    bar.style.boxShadow = '0 0 20px rgba(255,200,0,0.9)';
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (bar.isDragging) {
+      bar.x = e.clientX - bar.offsetX;
+      bar.y = e.clientY - bar.offsetY;
+      bar.style.left = bar.x + 'px';
+      bar.style.top = bar.y + 'px';
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (bar.isDragging) {
+      bar.isDragging = false;
+      bar.style.cursor = 'grab';
+      bar.style.boxShadow = '0 0 10px rgba(74,124,89,0.6)';
+    }
+  });
+
+  barsContainer.appendChild(bar);
+  bars.push(bar);
+}
+
+// animation loop using deltaTime for perfectly linear movement
+let lastTime = performance.now();
+function animateBars(time) {
+  const delta = (time - lastTime) / 1000; // seconds since last frame
+  lastTime = time;
+
+  for (const bar of bars) {
+    if (!bar.isDragging) {
+      bar.y += bar.speed * delta; // pixels per second
+      if (bar.y > window.innerHeight) {
+        bar.y = -100;
+        bar.x = Math.random() * window.innerWidth;
+        bar.style.left = bar.x + 'px';
       }
-      const days=Math.floor(distance/(1000*60*60*24));
-      const hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-      const minutes=Math.floor((distance%(1000*60*60))/(1000*60));
-      const seconds=Math.floor((distance%(1000*60))/1000);
-      timerEl.innerHTML=`${days}d ${hours}h ${minutes}m ${seconds}s`;
+      bar.style.top = bar.y + 'px';
     }
+  }
 
-    const countdownInterval=setInterval(updateCountdown,1000);
-    updateCountdown();
+  requestAnimationFrame(animateBars);
+}
 
-    countdownEl.addEventListener("click",()=>{confetti({particleCount:100, spread:70, origin:{y:0.6}})});
+requestAnimationFrame(animateBars);
 
-    // =======================
-    // MOD AGE
-    // =======================
-    const releaseDate = new Date('2025-07-24T21:10:00');
-    const modAgeEl = document.getElementById('mod-age');
 
-    function updateModAge(){
-      const now = new Date();
-      const diff = now - releaseDate;
-      const days=Math.floor(diff/(1000*60*60*24));
-      const hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-      const minutes=Math.floor((diff%(1000*60*60))/(1000*60));
-      const seconds=Math.floor((diff%(1000*60))/1000);
-      modAgeEl.innerHTML=`${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+
+</script>
+<script>
+const images = document.querySelectorAll('.changelog-img, .changelog-img-small, .changelog-img-large');
+
+images.forEach(img => {
+  // Mouse moves over image
+  img.addEventListener('mousemove', e => {
+    const rect = img.getBoundingClientRect();
+    const x = e.clientX - rect.left; // x inside image
+    const y = e.clientY - rect.top;  // y inside image
+
+    const moveX = (x / rect.width - 0.5) * 10;  // -5 to +5 px
+    const moveY = (y / rect.height - 0.5) * 10; // -5 to +5 px
+
+    const scale = img.classList.contains('changelog-img-small') ? 1.05 :
+                  img.classList.contains('changelog-img-large') ? 1.03 : 1.05;
+
+    img.style.transform = `scale(${scale}) translate(${moveX}px, ${moveY}px)`;
+  });
+
+  // When mouse enters, apply initial scale even before moving
+  img.addEventListener('mouseenter', () => {
+    const scale = img.classList.contains('changelog-img-small') ? 1.05 :
+                  img.classList.contains('changelog-img-large') ? 1.03 : 1.05;
+    img.style.transform = `scale(${scale}) translate(0,0)`;
+  });
+
+  // When mouse leaves, reset
+  img.addEventListener('mouseleave', () => {
+    img.style.transform = 'scale(1) translate(0,0)';
+  });
+});
+const counters = document.querySelectorAll('.stat-number');
+
+counters.forEach(counter => {
+  const target = +counter.getAttribute('data-target');
+  const duration = 2000; // total duration in ms
+  let start = 0;
+  const startTime = performance.now();
+
+  function updateCounter(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1); // 0 to 1
+
+    // ease-out cubic
+    const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+    counter.textContent = Math.floor(easedProgress * target);
+
+    if (progress < 1) {
+      requestAnimationFrame(updateCounter);
+    } else {
+      counter.textContent = target; // make sure it ends exactly at target
     }
+  }
 
-    updateModAge();
-    setInterval(updateModAge,1000);
+  requestAnimationFrame(updateCounter);
+});
 
-    // =======================
-    // FALLING BARS
-    // =======================
-    const barsContainer=document.querySelector('.falling-bars');
-    const NUM_BARS=30;
-    const bars=[];
 
-    for(let i=0;i<NUM_BARS;i++){
-      const bar=document.createElement('div');
-      bar.classList.add('falling-bar');
+</script>
 
-      bar.x=Math.random()*window.innerWidth;
-      bar.y=Math.random()*window.innerHeight;
-      bar.speed=0.7+Math.random()*0.3;
-      bar.originalSpeed=bar.speed;
-      bar.isDragging=false;
 
-      bar.style.left=bar.x+'px';
-      bar.style.top=bar.y+'px';
+</script>
 
-      // Dragging for desktop
-      bar.addEventListener('mousedown',e=>{
-        bar.isDragging=true;
-        bar.offsetX=e.clientX-bar.x;
-        bar.offsetY=e.clientY-bar.y;
-        bar.style.cursor='grabbing';
-      });
 
-      document.addEventListener('mousemove',e=>{
-        if(bar.isDragging){
-          bar.x=e.clientX-bar.offsetX;
-          bar.y=e.clientY-bar.offsetY;
-          bar.style.left=bar.x+'px';
-          bar.style.top=bar.y+'px';
-        }
-      });
-
-      document.addEventListener('mouseup',()=>{
-        if(bar.isDragging){
-          bar.isDragging=false;
-          bar.style.cursor='grab';
-        }
-      });
-
-      // Dragging for touch
-      bar.addEventListener('touchstart',e=>{
-        bar.isDragging=true;
-        bar.offsetX=e.touches[0].clientX-bar.x;
-        bar.offsetY=e.touches[0].clientY-bar.y;
-      });
-
-      bar.addEventListener('touchmove',e=>{
-        if(bar.isDragging){
-          bar.x=e.touches[0].clientX-bar.offsetX;
-          bar.y=e.touches[0].clientY-bar.offsetY;
-          bar.style.left=bar.x+'px';
-          bar.style
+</body>
+</html>
