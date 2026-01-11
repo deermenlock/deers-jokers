@@ -1,314 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" href="WebIcon.png">
-  <meta charset="UTF-8">
-  <title>Deer's Jokers</title>
+<meta charset="UTF-8">
+<title>Deer's Jokers</title>
+<link rel="icon" type="image/png" href="WebIcon.png">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  /* Reset & Body */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #f8fcf7, #76a387);
+    color: #2f3e3d;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-  <style>
-    /* ===================== General Styles ===================== */
-    body {
-      background: linear-gradient(135deg, #f8fcf7, #76a387);
-      color: #2f3e3d;
-      font-family: 'Montserrat', sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      overflow-x: hidden;
-    }
-    section {
-      margin-bottom: 40px;
-      width: 100%;
-      text-align: center;
-      background: linear-gradient(145deg, #76a387, rgba(255,255,255,0.6));
-      backdrop-filter: blur(10px);
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    section:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
-    }
-    h2 { font-family: 'Baloo 2', cursive; font-size: 32px; margin-bottom: 15px; color:#3e5c57; }
-    h3 { font-family: 'Baloo 2', cursive; }
-    li { margin-bottom: 10px; line-height:1.5; }
-    img { width:100%; max-width:600px; display:block; margin:20px auto; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1);}
-    a { color:#4a7c59; text-decoration:none; }
-    a:hover { text-decoration: underline; }
-    footer { text-align:center; padding:20px; font-size:14px; color:#556b63; width:100%; }
+  /* Fixed left sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: 180px;
+    height: 100vh;
+    background: #bfcec6;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 100;
+    overflow-y: auto;
+  }
 
-    /* ===================== Sidebars ===================== */
-    .sidebar, .right-sidebar {
-      width: 200px;
-      padding: 20px;
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-      overflow-y: auto;
-    }
-    .sidebar { left:0; background-color:#bfcec6; }
-    .right-sidebar { right:0; background:linear-gradient(to bottom, #4a7c59,#bfcec6,#a3c1ad); background-size:100% 300%; animation: gradientMove 10s ease-in-out infinite alternate; box-shadow: -2px0 5px rgba(0,0,0,0.1);}
-    .sidebar h3, .right-sidebar h3 { text-align:center; font-family: 'Baloo 2', cursive; margin-top:0; font-size:22px;}
-    .sidebar a, .right-sidebar .stat-item {
-      display:block; padding:10px; background-color:#a3c1ad; color:#2f3e3d; text-decoration:none; border-radius:8px; font-weight:600;
-    }
-    .sidebar a:hover { background-color:#8bb49b;}
-    .sidebar a.current { outline:3px solid #4a7c59; background-color:#c4d8c4; font-weight:700; box-shadow:0 0 8px rgba(74,124,89,0.6);}
-    .sidebar a.current:hover { outline-color:#76a387; box-shadow:0 0 12px rgba(74,124,89,0.8);}
-    .sidebar a.coming-soon { background-color:#d1d1d1; color:#888888; cursor:not-allowed; pointer-events:none;}
-    .right-sidebar .stat-item { pointer-events:none; margin-bottom:5px;}
-    #countdown { margin-top:auto; text-align:center; padding:25px; background-color:#a3c1ad; border-radius:25px; font-weight:600; cursor:pointer; }
+  .sidebar h3 { font-family: 'Baloo 2', cursive; text-align: center; margin-bottom: 10px; }
+  .sidebar a {
+    display: block; padding: 10px; border-radius: 8px;
+    background: #a3c1ad; color: #2f3e3d; text-decoration: none; font-weight: 600;
+  }
+  .sidebar a.current { outline: 3px solid #4a7c59; box-shadow: 0 0 8px rgba(74,124,89,0.6); }
 
-    @keyframes gradientMove { 0% {background-position:0% 0%;} 100% {background-position:0% 100%;} }
+  /* Right sidebar */
+  .right-sidebar {
+    position: fixed; top: 0; right: 0;
+    width: 180px; height: 100vh;
+    background: linear-gradient(to bottom, #4a7c59, #bfcec6, #a3c1ad);
+    padding: 20px; display: flex; flex-direction: column; gap: 10px;
+    overflow-y: auto; z-index: 100;
+  }
+  .right-sidebar h3 { text-align: center; font-family: 'Baloo 2', cursive; }
+  .right-sidebar .stat-item {
+    display: flex; justify-content: space-between;
+    padding: 8px 10px; border-radius: 8px;
+    background: #a3c1ad; font-weight: 600;
+  }
 
-    /* ===================== Main Content ===================== */
-    main {
-      position: relative;
-      width: calc(100% - 440px);
-      max-width: 800px;
-      margin:0 auto;
-      padding:40px 20px;
-    }
-    header { background-color:#a3c1ad; padding:40px 20px; text-align:center; width:100%; border-radius:12px; margin-bottom:20px;}
-    header h1 { font-family:'Baloo 2', cursive; font-size:48px; color:#2f3e3d; margin:0;}
-    header h2 { font-size:20px; margin-top:10px; color:#2f3e3d;}
+  /* Main content */
+  main {
+    margin-left: 200px;
+    margin-right: 200px;
+    padding: 20px;
+    flex: 1;
+  }
+  header { text-align: center; margin-bottom: 20px; }
+  header h1 { font-family: 'Baloo 2', cursive; font-size: 3em; color: #2f3e3d; }
+  header h2 { font-size: 1.2em; color: #2f3e3d; }
 
-    /* ===================== Falling Bars ===================== */
-    .falling-bars { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:auto; overflow:hidden; z-index:0; background:transparent;}
-    .falling-bar {
-      position:absolute; width:5px; height:100px; background:rgba(74,124,89,0.3);
-      border-radius:2px; cursor:grab; box-shadow:0 0 10px rgba(74,124,89,0.6); transition:box-shadow 0.2s, background 0.2s;
-      touch-action:none;
-    }
+  section {
+    margin-bottom: 30px; padding: 15px; border-radius: 12px;
+    background: rgba(0,0,0,0.05); text-align: center;
+  }
 
-    /* ===================== Developer Panel ===================== */
-    #dev-panel {
-      display:none; position:fixed; top:10px; left:50%; transform:translateX(-50%);
-      background: rgba(255,255,255,0.95); border: 2px solid #4a7c59; border-radius:10px; padding:20px; z-index:10000; max-width:90%;
-    }
-    #dev-panel button { margin:2px; padding:5px 10px; border-radius:5px; border:none; background:#4a7c59; color:white; font-weight:600; cursor:pointer;}
-    #dev-panel input { width:80px; padding:5px; margin:2px; border-radius:5px; border:1px solid #4a7c59; }
-  </style>
+  section img {
+    width: 100%; max-width: 400px; display: block; margin: 15px auto;
+    border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+  section img:hover { transform: scale(1.05); }
+
+  footer { text-align: center; padding: 10px; font-size: 0.9em; color: #556b63; }
+
+  /* Falling bars */
+  .falling-bars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+  .falling-bar {
+    position: absolute; width: 6px; height: 80px; border-radius: 2px;
+    background: rgba(74,124,89,0.3);
+    box-shadow: 0 0 10px rgba(74,124,89,0.6);
+    cursor: grab; transition: box-shadow 0.2s;
+  }
+
+  /* Developer icon */
+  #dev-icon {
+    position: fixed; top: 10px; left: 10px;
+    width: 50px; height: 50px;
+    z-index: 9999; cursor: pointer; user-select: none;
+  }
+
+  /* Dev Panel */
+  #dev-panel {
+    display: none;
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    background: #f8fcf7; border: 2px solid #4a7c59; border-radius: 12px;
+    padding: 20px; z-index: 1000; width: 90%; max-width: 400px;
+    max-height: 80%; overflow-y: auto;
+  }
+  #dev-panel h3 { text-align: center; font-family: 'Baloo 2', cursive; margin-bottom: 10px; }
+  .counter-control { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .counter-control button { padding: 4px 8px; border-radius: 6px; border: none; background: #4a7c59; color: #fff; font-weight: bold; cursor: pointer; }
+  .counter-control input { width: 50px; text-align: center; border-radius: 6px; border: 1px solid #aaa; }
+</style>
 </head>
 <body>
-  <!-- Falling Bars -->
-  <div class="falling-bars"></div>
 
-  <!-- Left Sidebar -->
-  <div class="sidebar">
-    <h3>Updates</h3>
-    <a class="coming-soon">2.3.0 (Coming Soon)</a>
-    <a href="index.html" class="current">2.2.0</a>
+<!-- Falling bars -->
+<div class="falling-bars"></div>
 
-    <div id="countdown">
-      Next Update In:<br>
-      <span id="timer">Loading...</span>
-    </div>
+<!-- Developer Icon -->
+<img src="WebIcon.png" id="dev-icon">
+
+<!-- Left Sidebar -->
+<div class="sidebar">
+  <h3>Updates</h3>
+  <a href="#" class="current">2.2.0</a>
+  <a class="coming-soon">2.3.0</a>
+
+  <div id="countdown" style="margin-top:auto; text-align:center; padding:15px; background:#a3c1ad; border-radius:12px; font-weight:600;">
+    Next Update In:<br><span id="timer">Loading...</span>
   </div>
+</div>
 
-  <!-- Main Content -->
-  <main>
-    <header>
-      <h1>Deer's Jokers</h1>
-      <h2>Potion Update (2/2) [2.2.0]</h2>
-    </header>
+<!-- Right Sidebar -->
+<div class="right-sidebar">
+  <h3>Mod Stats</h3>
+  <div class="stat-item">Jokers: <span id="joker-count">36</span></div>
+  <div class="stat-item">Enhancements: <span id="enhancement-count">1</span></div>
+  <div class="stat-item">Seals: <span id="seal-count">2</span></div>
+  <div class="stat-item">Tarots: <span id="tarot-count">2</span></div>
+  <div class="stat-item">Spectrals: <span id="spectral-count">2</span></div>
+  <div class="stat-item">Planets: <span id="planet-count">2</span></div>
+  <div class="stat-item">Booster Packs: <span id="boosterpack-count">3</span></div>
+  <div class="stat-item">Decks: <span id="deck-count">8</span></div>
+</div>
 
-    <section>
-      <h2>Changelog</h2>
-      <ul>
-        <h3>4 New Potion Jokers</h3>
-        <span style="font-size:16px;color:#3e5c57;">Each one of them having their own special ability!🧪</span>
-        <img src="PotionsPreview.png" alt="PotionsPreview.png">
+<!-- Main Content -->
+<main>
+  <header>
+    <h1>Deer's Jokers</h1>
+    <h2>Potion Update (2/2) [2.2.0]</h2>
+  </header>
 
-        <h3>Joker^3</h3>
-        <span style="font-size:16px;color:#3e5c57;">I wonder what it does🤔</span>
-        <img src="Joker3Preview.png" alt="Joker3Preview.png" style="width:30%; margin:20px auto; display:block;">
+  <section>
+    <h2>Changelog</h2>
+    <ul>
+      <li>4 New Potion Jokers</li>
+      <li>Joker^3</li>
+      <li>Jokers Sprite Overhaul</li>
+      <li>Bug Fixes</li>
+    </ul>
+    <img src="PotionsPreview.png" alt="PotionsPreview">
+    <img src="Joker3Preview.png" alt="Joker3Preview">
+    <img src="JokersOverhaulPreview.png" alt="JokersOverhaulPreview">
+  </section>
 
-        <h3>Jokers Sprite Overhaul</h3>
-        <span style="font-size:16px;color:#3e5c57;">If they weren't good enough already✏️</span>
-        <img src="JokersOverhaulPreview.png" alt="JokersOverhaulPreview.png" style="max-width:100%; margin:20px auto; display:block;">
+  <section>
+    <h2>Download</h2>
+    <p><a href="#">[WIP] Click here to download the mod [WIP]</a></p>
+  </section>
 
-        <h3>Bug Fixes</h3>
-        <ul style="font-family:'Montserrat',sans-serif;font-size:16px;color:#2f3e3d;">
-          <li><strong>Orange Potion Bug:</strong> Fixed Orange Potion not granting Hand Size</li>
-          <li><strong>Omega Potion Bug:</strong> Fixed Omega Potion not granting Orange Potion's Hand Size</li>
-        </ul>
-      </ul>
-    </section>
+  <footer>&copy; 2026 Deer's Jokers. All rights reserved.</footer>
+</main>
 
-    <section>
-      <h2>Download</h2>
-      <p><a href="#">[WIP] Click here to download the mod [WIP]</a></p>
-    </section>
-
-    <footer>
-      &copy; 2026 Deer's Jokers. All rights reserved.
-    </footer>
-  </main>
-
-  <!-- Right Sidebar -->
-  <div class="right-sidebar">
-    <h3>Mod Stats</h3>
-    <a class="stat-item"><strong>Mod Age:</strong> <br> <span id="mod-age">Calculating...</span></a>
-    <a class="stat-item"><strong>Jokers:</strong> <span id="joker-count">36</span></a>
-    <a class="stat-item"><strong>Enhancements:</strong> <span id="enhancement-count">1</span></a>
-    <a class="stat-item"><strong>Seals:</strong> <span id="seal-count">2</span></a>
-    <a class="stat-item"><strong>Tarots:</strong> <span id="tarot-count">2</span></a>
-    <a class="stat-item"><strong>Spectrals:</strong> <span id="spectral-count">2</span></a>
-    <a class="stat-item"><strong>Planets:</strong> <span id="planet-count">2</span></a>
-    <a class="stat-item"><strong>Booster Packs:</strong> <span id="boosterpack-count">3</span></a>
-    <a class="stat-item"><strong>Decks:</strong> <span id="Deck-count">8</span></a>
+<!-- Developer Panel -->
+<div id="dev-panel">
+  <h3>Developer Panel</h3>
+  <div class="counter-control">
+    <span>Jokers:</span>
+    <button onclick="changeCounter('joker-count',-1)">-1</button>
+    <input type="number" id="joker-input" value="36">
+    <button onclick="changeCounter('joker-count',1)">+1</button>
+    <button onclick="setCounter('joker-count','joker-input')">Set</button>
   </div>
-
-  <!-- Developer Panel -->
-  <div id="dev-panel">
-    <h3>Developer Mode</h3>
-    <div id="dev-stats"></div>
-    <hr>
-    <label>Next Update:</label>
-    <input type="datetime-local" id="next-update-input">
-    <button onclick="setNextUpdate()">Set</button>
+  <!-- Repeat similar blocks for Enhancements, Seals, Tarots, Spectrals, Planets, Booster Packs, Decks -->
+  <div class="counter-control">
+    <span>Enhancements:</span>
+    <button onclick="changeCounter('enhancement-count',-1)">-1</button>
+    <input type="number" id="enhancement-input" value="1">
+    <button onclick="changeCounter('enhancement-count',1)">+1</button>
+    <button onclick="setCounter('enhancement-count','enhancement-input')">Set</button>
   </div>
+</div>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
-/* ===================== Countdown ===================== */
-let nextUpdate = Date.UTC(2026,1,1,22,0,0);
-const timerEl = document.getElementById("timer");
-const countdownEl = document.getElementById("countdown");
+  /* Countdown Timer */
+  const nextUpdate = new Date(Date.UTC(2026,1,1,22,0,0));
+  const timerEl = document.getElementById("timer");
+  function updateCountdown() {
+    const diff = nextUpdate - new Date();
+    if(diff<=0){ timerEl.textContent="Update Released!"; return; }
+    const d=Math.floor(diff/86400000), h=Math.floor(diff%86400000/3600000), m=Math.floor(diff%3600000/60000), s=Math.floor(diff%60000/1000);
+    timerEl.textContent=`${d}d ${h}h ${m}m ${s}s`;
+  }
+  setInterval(updateCountdown,1000);
+  updateCountdown();
 
-function updateCountdown(){
-  const now = new Date().getTime();
-  const dist = nextUpdate - now;
-  if(dist <=0){ timerEl.innerText="Update Released!"; confetti({particleCount:200, spread:100, origin:{y:0.6}}); clearInterval(countdownInterval); return;}
-  const d = Math.floor(dist/(1000*60*60*24));
-  const h = Math.floor((dist%(1000*60*60*24))/(1000*60*60));
-  const m = Math.floor((dist%(1000*60*60))/(1000*60));
-  const s = Math.floor((dist%(1000*60))/1000);
-  timerEl.innerText=`${d}d ${h}h ${m}m ${s}s`;
-}
-const countdownInterval = setInterval(updateCountdown,1000);
-updateCountdown();
+  /* Developer panel trigger */
+  const devIcon = document.getElementById("dev-icon");
+  let holdTimer;
+  devIcon.addEventListener("mousedown",startHold);
+  devIcon.addEventListener("touchstart",startHold);
+  devIcon.addEventListener("mouseup",cancelHold);
+  devIcon.addEventListener("mouseleave",cancelHold);
+  devIcon.addEventListener("touchend",cancelHold);
+  devIcon.addEventListener("touchcancel",cancelHold);
 
-countdownEl.addEventListener("click",()=>{ confetti({particleCount:100,spread:70,origin:{y:0.6}}); });
+  const devPassword = "deerdev";
+  function startHold(e){ e.preventDefault(); holdTimer=setTimeout(()=>{
+      const entered=prompt("Enter developer password:");
+      if(entered===devPassword){ document.getElementById("dev-panel").style.display="block"; }
+  },3000);}
+  function cancelHold(){ clearTimeout(holdTimer); }
 
-/* ===================== Mod Age ===================== */
-const releaseDate = new Date('2025-07-24T21:10:00');
-const modAgeEl = document.getElementById('mod-age');
-function updateModAge(){
-  const now = new Date();
-  const diff = now - releaseDate;
-  const d = Math.floor(diff/(1000*60*60*24));
-  const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-  const m = Math.floor((diff%(1000*60*60))/(1000*60));
-  const s = Math.floor((diff%(1000*60))/1000);
-  modAgeEl.innerText=`${d}d ${h}h ${m}m ${s}s`;
-}
-updateModAge();
-setInterval(updateModAge,1000);
+  /* Counter functions */
+  function changeCounter(id, delta){
+    const el=document.getElementById(id);
+    el.textContent=Math.max(0,parseInt(el.textContent)+delta);
+    const input=document.getElementById(id.replace('-count','')+'-input');
+    if(input) input.value=el.textContent;
+  }
+  function setCounter(id,inputId){
+    const el=document.getElementById(id);
+    const input=document.getElementById(inputId);
+    const val=Math.max(0,parseInt(input.value)||0);
+    el.textContent=val;
+  }
 
-/* ===================== Falling Bars ===================== */
-const barsContainer = document.querySelector('.falling-bars');
-const NUM_BARS = 30;
-const bars = [];
-for(let i=0;i<NUM_BARS;i++){
-  const bar = document.createElement('div'); bar.classList.add('falling-bar');
-  bar.x = Math.random()*window.innerWidth; bar.y = Math.random()*window.innerHeight;
-  bar.speed = 0.7 + Math.random()*0.3; bar.originalSpeed = bar.speed; bar.isDragging=false;
-  bar.style.left=bar.x+'px'; bar.style.top=bar.y+'px';
+  /* Falling bars */
+  const barsContainer=document.querySelector('.falling-bars');
+  const NUM_BARS=25;
+  const bars=[];
+  for(let i=0;i<NUM_BARS;i++){
+    const bar=document.createElement('div');
+    bar.classList.add('falling-bar');
+    bar.x=Math.random()*window.innerWidth;
+    bar.y=Math.random()*window.innerHeight;
+    bar.speed=0.5 + Math.random()*0.5;
+    bar.isDragging=false;
+    bar.style.left=bar.x+'px'; bar.style.top=bar.y+'px';
+    bar.style.pointerEvents="auto";
 
-  // dragging
-  const drag = (e)=>{
-    if(bar.isDragging){ 
-      bar.x = e.touches ? e.touches[0].clientX - bar.offsetX : e.clientX - bar.offsetX;
-      bar.y = e.touches ? e.touches[0].clientY - bar.offsetY : e.clientY - bar.offsetY;
-      bar.style.left=bar.x+'px'; bar.style.top=bar.y+'px';
-    }
-  };
-  const stopDrag = ()=>{ bar.isDragging=false; bar.style.cursor='grab'; bar.speed=bar.originalSpeed; };
-
-  bar.addEventListener('mousedown',(e)=>{ bar.isDragging=true; bar.offsetX=e.clientX-bar.x; bar.offsetY=e.clientY-bar.y; bar.style.cursor='grabbing'; });
-  bar.addEventListener('touchstart',(e)=>{ bar.isDragging=true; bar.offsetX=e.touches[0].clientX-bar.x; bar.offsetY=e.touches[0].clientY-bar.y; bar.style.cursor='grabbing'; });
-
-  document.addEventListener('mouseup', stopDrag);
-  document.addEventListener('touchend', stopDrag);
-  document.addEventListener('mousemove', drag);
-  document.addEventListener('touchmove', drag);
-
-  barsContainer.appendChild(bar);
-  bars.push(bar);
-}
-
-function animateBars(){
-  for(const bar of bars){
-    if(!bar.isDragging){
-      bar.y += bar.speed;
-      if(bar.y>window.innerHeight){ bar.y=-100; bar.x=Math.random()*window.innerWidth; bar.style.left=bar.x+'px';}
+    // Drag
+    const dragStart=(e)=>{
+      e.preventDefault();
+      bar.isDragging=true;
+      const clientX=e.touches?e.touches[0].clientX:e.clientX;
+      const clientY=e.touches?e.touches[0].clientY:e.clientY;
+      bar.offsetX=clientX-bar.x;
+      bar.offsetY=clientY-bar.y;
+      bar.style.cursor='grabbing';
+    };
+    const dragMove=(e)=>{
+      if(!bar.isDragging) return;
+      const clientX=e.touches?e.touches[0].clientX:e.clientX;
+      const clientY=e.touches?e.touches[0].clientY:e.clientY;
+      bar.x=clientX-bar.offsetX;
+      bar.y=clientY-bar.offsetY;
+      bar.style.left=bar.x+'px';
       bar.style.top=bar.y+'px';
-    }
+    };
+    const dragEnd=()=>{ bar.isDragging=false; bar.style.cursor='grab'; };
+
+    bar.addEventListener('mousedown',dragStart);
+    bar.addEventListener('touchstart',dragStart);
+    document.addEventListener('mousemove',dragMove);
+    document.addEventListener('touchmove',dragMove);
+    document.addEventListener('mouseup',dragEnd);
+    document.addEventListener('touchend',dragEnd);
+
+    barsContainer.appendChild(bar);
+    bars.push(bar);
   }
-  requestAnimationFrame(animateBars);
-}
-animateBars();
 
-/* ===================== Developer Panel ===================== */
-const devPassword = "deerdev"; // change this to your secret
-const devPanel = document.getElementById("dev-panel");
-const devStatsDiv = document.getElementById("dev-stats");
-
-const stats = ['joker','enhancement','seal','tarot','spectral','planet','boosterpack','Deck'];
-function renderDevStats(){
-  devStatsDiv.innerHTML = "";
-  stats.forEach(stat=>{
-    const span = document.getElementById(stat+'-count');
-    const div = document.createElement('div');
-    div.innerHTML = `<strong>${stat.charAt(0).toUpperCase()+stat.slice(1)}:</strong>
-      <button onclick="modifyStat('${stat}',1)">+1</button>
-      <button onclick="modifyStat('${stat}',-1)">-1</button>
-      <input type="number" id="input-${stat}" value="${span.innerText}" style="width:60px;">
-      <button onclick="setStat('${stat}')">Set</button>`;
-    devStatsDiv.appendChild(div);
-  });
-}
-
-function modifyStat(stat, amount){
-  const el = document.getElementById(stat+'-count');
-  let val = parseInt(el.innerText);
-  val += amount; if(val<0) val=0;
-  el.innerText=val;
-  document.getElementById('input-'+stat).value=val;
-}
-
-function setStat(stat){
-  const val = parseInt(document.getElementById('input-'+stat).value);
-  if(!isNaN(val) && val>=0){
-    document.getElementById(stat+'-count').innerText=val;
+  function animateBars(){
+    bars.forEach(bar=>{
+      if(!bar.isDragging){
+        bar.y+=bar.speed;
+        if(bar.y>window.innerHeight){
+          bar.y=-100;
+          bar.x=Math.random()*window.innerWidth;
+          bar.style.left=bar.x+'px';
+        }
+        bar.style.top=bar.y+'px';
+      }
+    });
+    requestAnimationFrame(animateBars);
   }
-}
-
-function setNextUpdate(){
-  const input = document.getElementById('next-update-input').value;
-  if(input){ nextUpdate = new Date(input).getTime(); updateCountdown(); alert("Next update set!"); }
-}
-
-// trigger dev panel (desktop & mobile)
-document.addEventListener('keydown', (e)=>{ if(e.key==='D') promptDev(); });
-document.addEventListener('touchstart', (e)=>{ if(e.touches.length===3) promptDev(); }); // triple touch opens panel
-
-function promptDev(){
-  const p = prompt("Enter developer password:");
-  if(p===devPassword){ devPanel.style.display='block'; renderDevStats(); } else{ alert("Wrong password!"); }
-}
-
+  animateBars();
 </script>
 </body>
 </html>
