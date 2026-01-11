@@ -1,301 +1,510 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Deer's Jokers</title>
-<link rel="icon" type="image/png" href="WebIcon.png">
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="WebIcon.png">
+  <meta charset="UTF-8">
+  <title>Deer's Jokers</title>
 
-<style>
-  /* Reset & Body */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(135deg, #f8fcf7, #76a387);
-    color: #2f3e3d;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
 
-  /* Fixed left sidebar */
-  .sidebar {
-    position: fixed;
-    top: 0; left: 0;
-    width: 180px;
-    height: 100vh;
-    background: #bfcec6;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 100;
-    overflow-y: auto;
-  }
+  <style>
+    /* GENERAL STYLES */
+    body {
+      background: linear-gradient(135deg, #f8fcf7, #76a387);
+      color: #2f3e3d;
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
 
-  .sidebar h3 { font-family: 'Baloo 2', cursive; text-align: center; margin-bottom: 10px; }
-  .sidebar a {
-    display: block; padding: 10px; border-radius: 8px;
-    background: #a3c1ad; color: #2f3e3d; text-decoration: none; font-weight: 600;
-  }
-  .sidebar a.current { outline: 3px solid #4a7c59; box-shadow: 0 0 8px rgba(74,124,89,0.6); }
+    main {
+      position: relative;
+      width: calc(100% - 440px); /* left + right sidebars */
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
 
-  /* Right sidebar */
-  .right-sidebar {
-    position: fixed; top: 0; right: 0;
-    width: 180px; height: 100vh;
-    background: linear-gradient(to bottom, #4a7c59, #bfcec6, #a3c1ad);
-    padding: 20px; display: flex; flex-direction: column; gap: 10px;
-    overflow-y: auto; z-index: 100;
-  }
-  .right-sidebar h3 { text-align: center; font-family: 'Baloo 2', cursive; }
-  .right-sidebar .stat-item {
-    display: flex; justify-content: space-between;
-    padding: 8px 10px; border-radius: 8px;
-    background: #a3c1ad; font-weight: 600;
-  }
+    header {
+      background-color: #a3c1ad;
+      padding: 40px 20px;
+      text-align: center;
+      width: 100%;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
 
-  /* Main content */
-  main {
-    margin-left: 200px;
-    margin-right: 200px;
-    padding: 20px;
-    flex: 1;
-  }
-  header { text-align: center; margin-bottom: 20px; }
-  header h1 { font-family: 'Baloo 2', cursive; font-size: 3em; color: #2f3e3d; }
-  header h2 { font-size: 1.2em; color: #2f3e3d; }
+    header h1 {
+      font-family: 'Baloo 2', cursive;
+      font-size: 48px;
+      margin: 0;
+      color: #2f3e3d;
+    }
 
-  section {
-    margin-bottom: 30px; padding: 15px; border-radius: 12px;
-    background: rgba(0,0,0,0.05); text-align: center;
-  }
+    header h2 {
+      font-size: 20px;
+      margin-top: 10px;
+      color: #2f3e3d;
+    }
 
-  section img {
-    width: 100%; max-width: 400px; display: block; margin: 15px auto;
-    border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-  }
-  section img:hover { transform: scale(1.05); }
+    section {
+      margin-bottom: 40px;
+      width: 100%;
+      text-align: center;
+      background: linear-gradient(145deg, #76a387, rgba(255,255,255,0.6));
+      backdrop-filter: blur(10px);
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-  footer { text-align: center; padding: 10px; font-size: 0.9em; color: #556b63; }
+    section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    }
 
-  /* Falling bars */
-  .falling-bars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-  .falling-bar {
-    position: absolute; width: 6px; height: 80px; border-radius: 2px;
-    background: rgba(74,124,89,0.3);
-    box-shadow: 0 0 10px rgba(74,124,89,0.6);
-    cursor: grab; transition: box-shadow 0.2s;
-  }
+    section ul {
+      text-align: left;
+      padding-left: 20px;
+      display: inline-block;
+    }
 
-  /* Developer icon */
-  #dev-icon {
-    position: fixed; top: 10px; left: 10px;
-    width: 50px; height: 50px;
-    z-index: 9999; cursor: pointer; user-select: none;
-  }
+    h2 {
+      font-family: 'Baloo 2', cursive;
+      font-size: 32px;
+      margin-bottom: 15px;
+      color: #3e5c57;
+    }
 
-  /* Dev Panel */
-  #dev-panel {
-    display: none;
-    position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    background: #f8fcf7; border: 2px solid #4a7c59; border-radius: 12px;
-    padding: 20px; z-index: 1000; width: 90%; max-width: 400px;
-    max-height: 80%; overflow-y: auto;
-  }
-  #dev-panel h3 { text-align: center; font-family: 'Baloo 2', cursive; margin-bottom: 10px; }
-  .counter-control { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .counter-control button { padding: 4px 8px; border-radius: 6px; border: none; background: #4a7c59; color: #fff; font-weight: bold; cursor: pointer; }
-  .counter-control input { width: 50px; text-align: center; border-radius: 6px; border: 1px solid #aaa; }
-</style>
+    li {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    img {
+      width: 100%;
+      max-width: 600px;
+      display: block;
+      margin: 20px auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    img:hover {
+      transform: scale(1.05);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 14px;
+      color: #556b63;
+      width: 100%;
+    }
+
+    a {
+      color: #4a7c59;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* LEFT SIDEBAR */
+    .sidebar {
+      width: 200px;
+      background-color: #bfcec6;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      text-align: left;
+      z-index: 10;
+    }
+
+    .sidebar h3 {
+      margin-top: 0;
+      font-family: 'Baloo 2', cursive;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 10px;
+      background-color: #a3c1ad;
+      color: #2f3e3d;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      text-align: left;
+    }
+
+    .sidebar a:hover {
+      background-color: #8bb49b;
+    }
+
+    .sidebar a.coming-soon {
+      background-color: #d1d1d1;
+      color: #888888;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .sidebar a.current {
+      outline: 3px solid #4a7c59;
+      border-radius: 8px;
+      background-color: #c4d8c4;
+      font-weight: 700;
+      box-shadow: 0 0 8px rgba(74,124,89,0.6);
+    }
+
+    .sidebar a.current:hover {
+      outline-color: #76a387;
+      box-shadow: 0 0 12px rgba(74,124,89,0.8);
+    }
+
+    #countdown {
+      margin-top: auto;
+      text-align: center;
+      padding: 25px;
+      background-color: #a3c1ad;
+      border-radius: 25px;
+      color: #2f3e3d;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* RIGHT SIDEBAR */
+    .right-sidebar {
+      width: 200px;
+      padding: 20px;
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      border-radius: 0 0 0 0;
+      background: linear-gradient(to bottom, #4a7c59, #bfcec6, #a3c1ad);
+      background-size: 100% 300%;
+      animation: gradientMove 10s ease-in-out infinite alternate;
+      z-index: 10;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 0% 100%; }
+    }
+
+    .right-sidebar h3 {
+      margin-top: 0;
+      font-family: 'Baloo 2', cursive;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .right-sidebar .stat-item {
+      display: block;
+      padding: 10px;
+      background-color: #a3c1ad;
+      color: #2f3e3d;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      pointer-events: none;
+    }
+
+    /* FALLING BARS */
+    .falling-bars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+      overflow: hidden;
+      z-index: 0;
+      background: transparent;
+    }
+
+    .falling-bar {
+      position: absolute;
+      width: 5px;
+      height: 100px;
+      background: rgba(74,124,89,0.3);
+      border-radius: 2px;
+      cursor: grab;
+      box-shadow: 0 0 10px rgba(74,124,89,0.6);
+      transition: box-shadow 0.2s, background 0.2s;
+    }
+
+    /* MOD ICON (ADMIN PANEL TRIGGER) */
+    #mod-icon {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      width: 50px;
+      height: 50px;
+      background: url('WebIcon.png') no-repeat center center;
+      background-size: cover;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 100;
+      border: 2px solid #4a7c59;
+    }
+
+    /* ADMIN PANEL */
+    #admin-panel {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 400px;
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      z-index: 200;
+      overflow-y: auto;
+      max-height: 80vh;
+    }
+
+    #admin-panel h2 {
+      margin-top: 0;
+      text-align: center;
+      font-family: 'Baloo 2', cursive;
+      font-size: 24px;
+      margin-bottom: 15px;
+    }
+
+    .counter-control {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .counter-control button {
+      padding: 5px 10px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #4a7c59;
+      background-color: #a3c1ad;
+      cursor: pointer;
+    }
+
+    .counter-control input {
+      width: 60px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    #admin-close {
+      display: block;
+      margin: 10px auto 0 auto;
+      padding: 5px 10px;
+      background-color: #bfcec6;
+      border: 1px solid #4a7c59;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="falling-bars"></div>
 
-<!-- Falling bars -->
-<div class="falling-bars"></div>
+  <!-- MOD ICON -->
+  <div id="mod-icon"></div>
 
-<!-- Developer Icon -->
-<img src="WebIcon.png" id="dev-icon">
-
-<!-- Left Sidebar -->
-<div class="sidebar">
-  <h3>Updates</h3>
-  <a href="#" class="current">2.2.0</a>
-  <a class="coming-soon">2.3.0</a>
-
-  <div id="countdown" style="margin-top:auto; text-align:center; padding:15px; background:#a3c1ad; border-radius:12px; font-weight:600;">
-    Next Update In:<br><span id="timer">Loading...</span>
+  <!-- ADMIN PANEL -->
+  <div id="admin-panel">
+    <h2>Admin Panel</h2>
+    <div id="admin-counters"></div>
+    <button id="admin-close">Close</button>
   </div>
-</div>
 
-<!-- Right Sidebar -->
-<div class="right-sidebar">
-  <h3>Mod Stats</h3>
-  <div class="stat-item">Jokers: <span id="joker-count">36</span></div>
-  <div class="stat-item">Enhancements: <span id="enhancement-count">1</span></div>
-  <div class="stat-item">Seals: <span id="seal-count">2</span></div>
-  <div class="stat-item">Tarots: <span id="tarot-count">2</span></div>
-  <div class="stat-item">Spectrals: <span id="spectral-count">2</span></div>
-  <div class="stat-item">Planets: <span id="planet-count">2</span></div>
-  <div class="stat-item">Booster Packs: <span id="boosterpack-count">3</span></div>
-  <div class="stat-item">Decks: <span id="deck-count">8</span></div>
-</div>
+  <!-- LEFT SIDEBAR -->
+  <div class="sidebar">
+    <h3>Updates</h3>
+    <a class="coming-soon">2.3.0 (Coming Soon)</a>
+    <a href="index.html" class="current">2.2.0</a>
 
-<!-- Main Content -->
-<main>
-  <header>
-    <h1>Deer's Jokers</h1>
-    <h2>Potion Update (2/2) [2.2.0]</h2>
-  </header>
-
-  <section>
-    <h2>Changelog</h2>
-    <ul>
-      <li>4 New Potion Jokers</li>
-      <li>Joker^3</li>
-      <li>Jokers Sprite Overhaul</li>
-      <li>Bug Fixes</li>
-    </ul>
-    <img src="PotionsPreview.png" alt="PotionsPreview">
-    <img src="Joker3Preview.png" alt="Joker3Preview">
-    <img src="JokersOverhaulPreview.png" alt="JokersOverhaulPreview">
-  </section>
-
-  <section>
-    <h2>Download</h2>
-    <p><a href="#">[WIP] Click here to download the mod [WIP]</a></p>
-  </section>
-
-  <footer>&copy; 2026 Deer's Jokers. All rights reserved.</footer>
-</main>
-
-<!-- Developer Panel -->
-<div id="dev-panel">
-  <h3>Developer Panel</h3>
-  <div class="counter-control">
-    <span>Jokers:</span>
-    <button onclick="changeCounter('joker-count',-1)">-1</button>
-    <input type="number" id="joker-input" value="36">
-    <button onclick="changeCounter('joker-count',1)">+1</button>
-    <button onclick="setCounter('joker-count','joker-input')">Set</button>
+    <!-- Countdown Timer -->
+    <div id="countdown">
+      Next Update In:<br>
+      <span id="timer">Loading...</span>
+    </div>
   </div>
-  <!-- Repeat similar blocks for Enhancements, Seals, Tarots, Spectrals, Planets, Booster Packs, Decks -->
-  <div class="counter-control">
-    <span>Enhancements:</span>
-    <button onclick="changeCounter('enhancement-count',-1)">-1</button>
-    <input type="number" id="enhancement-input" value="1">
-    <button onclick="changeCounter('enhancement-count',1)">+1</button>
-    <button onclick="setCounter('enhancement-count','enhancement-input')">Set</button>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <header>
+      <h1>Deer's Jokers</h1>
+      <h2>Potion Update (2/2) [2.2.0]</h2>
+    </header>
+
+    <section>
+      <h2>Changelog</h2>
+      <ul>
+        <h3>4 New Potion Jokers</h3>
+        <span style="font-size:16px; color:#3e5c57;">Each one of them having their own special ability!🧪</span>
+        <img src="PotionsPreview.png" alt="PotionsPreview.png">
+
+        <h3>Joker^3</h3>
+        <span style="font-size:16px; color:#3e5c57;">I wonder what it does🤔</span>
+        <img src="Joker3Preview.png" alt="Joker3Preview.png" style="width:30%; height:auto; display:block; margin:20px auto;">
+
+        <h3>Jokers Sprite Overhaul</h3>
+        <span style="font-size:16px; color:#3e5c57;">If they weren't good enough already✏️</span>
+        <img src="JokersOverhaulPreview.png" alt="JokersOverhaulPreview.png" width="2940" height="456" style="display:block; margin:20px auto; max-width:100%; height:auto;">
+
+        <h3>Bug Fixes</h3>
+        <ul style="font-family:'Montserrat', sans-serif; font-size:16px; color:#2f3e3d;">
+          <li><strong>Orange Potion Bug:</strong> Fixed Orange Potion not granting the player Hand Size</li>
+          <li><strong>Omega Potion Bug:</strong> Fixed Omega Potion not granting the player Orange Potion's Hand Size</li>
+        </ul>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Download</h2>
+      <p><a href="#">[WIP] Click here to download the mod [WIP]</a></p>
+    </section>
+
+    <footer>
+      &copy; 2026 Deer's Jokers. All rights reserved.
+    </footer>
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <div class="right-sidebar">
+    <h3>Mod Stats</h3>
+    <a class="stat-item" href="#"><strong>Mod Age:</strong><br> <span id="mod-age">Calculating...</span></a>
+    <a class="stat-item" href="#"><strong>Jokers:</strong> <span id="joker-count">36</span></a>
+    <a class="stat-item" href="#"><strong>Enhancements:</strong> <span id="enhancement-count">1</span></a>
+    <a class="stat-item" href="#"><strong>Seals:</strong> <span id="seal-count">2</span></a>
+    <a class="stat-item" href="#"><strong>Tarots:</strong> <span id="tarot-count">2</span></a>
+    <a class="stat-item" href="#"><strong>Spectrals:</strong> <span id="spectral-count">2</span></a>
+    <a class="stat-item" href="#"><strong>Planets:</strong> <span id="planet-count">2</span></a>
+    <a class="stat-item" href="#"><strong>Booster Packs:</strong> <span id="boosterpack-count">3</span></a>
+    <a class="stat-item" href="#"><strong>Decks:</strong> <span id="Deck-count">8</span></a>
   </div>
-</div>
 
-<script>
-  /* Countdown Timer */
-  const nextUpdate = new Date(Date.UTC(2026,1,1,22,0,0));
-  const timerEl = document.getElementById("timer");
-  function updateCountdown() {
-    const diff = nextUpdate - new Date();
-    if(diff<=0){ timerEl.textContent="Update Released!"; return; }
-    const d=Math.floor(diff/86400000), h=Math.floor(diff%86400000/3600000), m=Math.floor(diff%3600000/60000), s=Math.floor(diff%60000/1000);
-    timerEl.textContent=`${d}d ${h}h ${m}m ${s}s`;
-  }
-  setInterval(updateCountdown,1000);
-  updateCountdown();
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    // =======================
+    // COUNTDOWN
+    // =======================
+    const nextUpdate = Date.UTC(2026,1,1,22,0,0);
+    const timerEl = document.getElementById("timer");
+    const countdownEl = document.getElementById("countdown");
 
-  /* Developer panel trigger */
-  const devIcon = document.getElementById("dev-icon");
-  let holdTimer;
-  devIcon.addEventListener("mousedown",startHold);
-  devIcon.addEventListener("touchstart",startHold);
-  devIcon.addEventListener("mouseup",cancelHold);
-  devIcon.addEventListener("mouseleave",cancelHold);
-  devIcon.addEventListener("touchend",cancelHold);
-  devIcon.addEventListener("touchcancel",cancelHold);
+    function updateCountdown(){
+      const now = new Date().getTime();
+      const distance = nextUpdate - now;
+      if(distance<=0){
+        timerEl.innerHTML="Update Released!";
+        confetti({particleCount:200, spread:100, origin:{y:0.6}});
+        clearInterval(countdownInterval);
+        return;
+      }
+      const days=Math.floor(distance/(1000*60*60*24));
+      const hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+      const minutes=Math.floor((distance%(1000*60*60))/(1000*60));
+      const seconds=Math.floor((distance%(1000*60))/1000);
+      timerEl.innerHTML=`${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
 
-  const devPassword = "deerdev";
-  function startHold(e){ e.preventDefault(); holdTimer=setTimeout(()=>{
-      const entered=prompt("Enter developer password:");
-      if(entered===devPassword){ document.getElementById("dev-panel").style.display="block"; }
-  },3000);}
-  function cancelHold(){ clearTimeout(holdTimer); }
+    const countdownInterval=setInterval(updateCountdown,1000);
+    updateCountdown();
 
-  /* Counter functions */
-  function changeCounter(id, delta){
-    const el=document.getElementById(id);
-    el.textContent=Math.max(0,parseInt(el.textContent)+delta);
-    const input=document.getElementById(id.replace('-count','')+'-input');
-    if(input) input.value=el.textContent;
-  }
-  function setCounter(id,inputId){
-    const el=document.getElementById(id);
-    const input=document.getElementById(inputId);
-    const val=Math.max(0,parseInt(input.value)||0);
-    el.textContent=val;
-  }
+    countdownEl.addEventListener("click",()=>{confetti({particleCount:100, spread:70, origin:{y:0.6}})});
 
-  /* Falling bars */
-  const barsContainer=document.querySelector('.falling-bars');
-  const NUM_BARS=25;
-  const bars=[];
-  for(let i=0;i<NUM_BARS;i++){
-    const bar=document.createElement('div');
-    bar.classList.add('falling-bar');
-    bar.x=Math.random()*window.innerWidth;
-    bar.y=Math.random()*window.innerHeight;
-    bar.speed=0.5 + Math.random()*0.5;
-    bar.isDragging=false;
-    bar.style.left=bar.x+'px'; bar.style.top=bar.y+'px';
-    bar.style.pointerEvents="auto";
+    // =======================
+    // MOD AGE
+    // =======================
+    const releaseDate = new Date('2025-07-24T21:10:00');
+    const modAgeEl = document.getElementById('mod-age');
 
-    // Drag
-    const dragStart=(e)=>{
-      e.preventDefault();
-      bar.isDragging=true;
-      const clientX=e.touches?e.touches[0].clientX:e.clientX;
-      const clientY=e.touches?e.touches[0].clientY:e.clientY;
-      bar.offsetX=clientX-bar.x;
-      bar.offsetY=clientY-bar.y;
-      bar.style.cursor='grabbing';
-    };
-    const dragMove=(e)=>{
-      if(!bar.isDragging) return;
-      const clientX=e.touches?e.touches[0].clientX:e.clientX;
-      const clientY=e.touches?e.touches[0].clientY:e.clientY;
-      bar.x=clientX-bar.offsetX;
-      bar.y=clientY-bar.offsetY;
+    function updateModAge(){
+      const now = new Date();
+      const diff = now - releaseDate;
+      const days=Math.floor(diff/(1000*60*60*24));
+      const hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+      const minutes=Math.floor((diff%(1000*60*60))/(1000*60));
+      const seconds=Math.floor((diff%(1000*60))/1000);
+      modAgeEl.innerHTML=`${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    updateModAge();
+    setInterval(updateModAge,1000);
+
+    // =======================
+    // FALLING BARS
+    // =======================
+    const barsContainer=document.querySelector('.falling-bars');
+    const NUM_BARS=30;
+    const bars=[];
+
+    for(let i=0;i<NUM_BARS;i++){
+      const bar=document.createElement('div');
+      bar.classList.add('falling-bar');
+
+      bar.x=Math.random()*window.innerWidth;
+      bar.y=Math.random()*window.innerHeight;
+      bar.speed=0.7+Math.random()*0.3;
+      bar.originalSpeed=bar.speed;
+      bar.isDragging=false;
+
       bar.style.left=bar.x+'px';
       bar.style.top=bar.y+'px';
-    };
-    const dragEnd=()=>{ bar.isDragging=false; bar.style.cursor='grab'; };
 
-    bar.addEventListener('mousedown',dragStart);
-    bar.addEventListener('touchstart',dragStart);
-    document.addEventListener('mousemove',dragMove);
-    document.addEventListener('touchmove',dragMove);
-    document.addEventListener('mouseup',dragEnd);
-    document.addEventListener('touchend',dragEnd);
+      // Dragging for desktop
+      bar.addEventListener('mousedown',e=>{
+        bar.isDragging=true;
+        bar.offsetX=e.clientX-bar.x;
+        bar.offsetY=e.clientY-bar.y;
+        bar.style.cursor='grabbing';
+      });
 
-    barsContainer.appendChild(bar);
-    bars.push(bar);
-  }
-
-  function animateBars(){
-    bars.forEach(bar=>{
-      if(!bar.isDragging){
-        bar.y+=bar.speed;
-        if(bar.y>window.innerHeight){
-          bar.y=-100;
-          bar.x=Math.random()*window.innerWidth;
+      document.addEventListener('mousemove',e=>{
+        if(bar.isDragging){
+          bar.x=e.clientX-bar.offsetX;
+          bar.y=e.clientY-bar.offsetY;
           bar.style.left=bar.x+'px';
+          bar.style.top=bar.y+'px';
         }
-        bar.style.top=bar.y+'px';
-      }
-    });
-    requestAnimationFrame(animateBars);
-  }
-  animateBars();
-</script>
-</body>
-</html>
+      });
+
+      document.addEventListener('mouseup',()=>{
+        if(bar.isDragging){
+          bar.isDragging=false;
+          bar.style.cursor='grab';
+        }
+      });
+
+      // Dragging for touch
+      bar.addEventListener('touchstart',e=>{
+        bar.isDragging=true;
+        bar.offsetX=e.touches[0].clientX-bar.x;
+        bar.offsetY=e.touches[0].clientY-bar.y;
+      });
+
+      bar.addEventListener('touchmove',e=>{
+        if(bar.isDragging){
+          bar.x=e.touches[0].clientX-bar.offsetX;
+          bar.y=e.touches[0].clientY-bar.offsetY;
+          bar.style.left=bar.x+'px';
+          bar.style
