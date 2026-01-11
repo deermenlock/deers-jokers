@@ -10,185 +10,218 @@
 
   <style>
     body {
-      background-color: #c9ebf5; /* calm, natural light green/blue */
-      color: #2f3e3d; /* dark text for contrast */
+      background: linear-gradient(135deg, #f8fcf7, #76a387);
+      color: #2f3e3d;
       font-family: 'Montserrat', sans-serif;
       margin: 0;
       padding: 0;
-      display: flex; /* sidebar + content */
+      display: flex;
     }
 
-    /* Sidebar styling */
-    .sidebar {
+    /* Sidebars */
+    .sidebar, .right-sidebar {
       width: 200px;
-      background-color: #dbe9e2; /* soft green */
       padding: 20px;
+      height: 100vh;
+      position: fixed;
       display: flex;
       flex-direction: column;
       gap: 10px;
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
       box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-      text-align: left; /* keep list left-aligned */
+      overflow-y: auto;
     }
 
-    .sidebar h3 {
-      margin-top: 0;
-      font-family: 'Baloo 2', cursive;
-      font-size: 22px;
-      text-align: center;
+    .sidebar { left: 0; background-color: #bfcec6; }
+    .right-sidebar { right: 0; background: linear-gradient(to bottom, #4a7c59, #bfcec6, #a3c1ad); background-size: 100% 300%; animation: gradientMove 10s ease-in-out infinite alternate; box-shadow: -2px 0 5px rgba(0,0,0,0.1); }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 0% 100%; }
     }
 
-    .sidebar a {
-      display: block;
-      padding: 10px;
-      background-color: #a3c1ad;
-      color: #2f3e3d;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      text-align: left; /* keep button text left-aligned */
-    }
+    .sidebar h3, .right-sidebar h3 { text-align: center; font-family: 'Baloo 2', cursive; font-size: 22px; margin-top: 0; }
+    .sidebar a, .right-sidebar .stat-item { display: block; padding: 10px; border-radius: 8px; font-weight: 600; text-decoration: none; color: #2f3e3d; }
+    .sidebar a:hover { background-color: #8bb49b; }
+    .sidebar a.current { outline: 3px solid #4a7c59; background-color: #c4d8c4; font-weight: 700; box-shadow: 0 0 8px rgba(74,124,89,0.6); }
+    #countdown { margin-top: auto; text-align: center; padding: 25px; background-color: #a3c1ad; border-radius: 25px; font-weight: 600; cursor: pointer; }
 
-    .sidebar a:hover {
-      background-color: #8bb49b;
-    }
-
-    /* Main content next to sidebar */
     main {
-      margin-left: 220px; /* leave space for sidebar */
-      padding: 40px 20px;
+      position: relative;
+      width: calc(100% - 440px);
       max-width: 800px;
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* center everything inside main */
+      margin: 0 auto;
+      padding: 40px 20px;
     }
 
     header {
-      background-color: #a3c1ad; /* soft green */
+      background-color: #a3c1ad;
       padding: 40px 20px;
       text-align: center;
-      width: 100%;
       border-radius: 12px;
       margin-bottom: 20px;
     }
 
-    header h1 {
-      font-family: 'Baloo 2', cursive;
-      font-size: 48px;
-      margin: 0;
-      color: #2f3e3d;
-    }
-
-    header p {
-      font-size: 20px;
-      margin-top: 10px;
-      color: #2f3e3d;
-    }
+    header h1 { font-family: 'Baloo 2', cursive; font-size: 48px; margin: 0; color: #2f3e3d; }
+    header h2 { font-size: 20px; margin-top: 10px; color: #2f3e3d; }
 
     section {
       margin-bottom: 40px;
       width: 100%;
-      text-align: center; /* center section content */
-    }
-
-    section ul {
-      text-align: left; /* lists inside sections stay left-aligned if needed */
-      padding-left: 20px;
-      display: inline-block; /* allow centering the list block itself */
-    }
-
-    h2 {
-      font-family: 'Baloo 2', cursive;
-      font-size: 32px;
-      margin-bottom: 15px;
-      color: #3e5c57;
-    }
-
-    li {
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
-
-    img {
-      width: 100%;
-      max-width: 600px;
-      display: block;
-      margin: 20px auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    footer {
       text-align: center;
-      padding: 20px;
-      font-size: 14px;
-      color: #556b63;
-      width: 100%;
+      background: linear-gradient(145deg, #76a387, rgba(255,255,255,0.6));
+      backdrop-filter: blur(10px);
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    a {
-      color: #4a7c59;
-      text-decoration: none;
-    }
+    section:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.2); }
+    section ul { text-align: left; padding-left: 20px; display: inline-block; }
 
-    a:hover {
-      text-decoration: underline;
-    }
+    h2 { font-family: 'Baloo 2', cursive; font-size: 32px; margin-bottom: 15px; color: #3e5c57; }
+    li { margin-bottom: 10px; line-height: 1.5; }
+    img { width: 100%; max-width: 600px; display: block; margin: 20px auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+    footer { text-align: center; padding: 20px; font-size: 14px; color: #556b63; width: 100%; }
+    a { color: #4a7c59; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Falling bars */
+    .falling-bars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: auto; overflow: hidden; z-index: 0; }
+    .falling-bar { position: absolute; width: 5px; height: 100px; background: rgba(74,124,89,0.3); border-radius: 2px; cursor: grab; box-shadow: 0 0 10px rgba(74,124,89,0.6); }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <h3>Updates</h3>
-    <a href="index.html">2.2.0</a>
-    <!-- Future updates can be added here -->
-    <!-- <a href="v2-1-0.html">2.1.0</a> -->
-    <!-- <a href="v2-0-0.html">2.0.0</a> -->
+<div class="falling-bars"></div>
+
+<div class="sidebar">
+  <h3>Updates</h3>
+  <a class="coming-soon">2.3.0 (Coming Soon)</a>
+  <a href="index.html" class="current">2.2.0</a>
+
+  <div id="countdown">
+    Next Update In:<br>
+    <span id="timer">Loading...</span>
   </div>
+</div>
 
-  <!-- Main content -->
-  <main>
-    <header>
-      <h1>Deer's Jokers</h1>
-      <p>Potion Update (2/2) [2.2.0]</p>
-    </header>
+<main>
+  <header>
+    <h1>Deer's Jokers</h1>
+    <h2>Potion Update (2/2) [2.2.0]</h2>
+  </header>
 
-    <section>
-      <h2>Changelog</h2>
-      <ul>
-        <li>4 New Potion Jokers</li>
-        <span style="font-size: 16px; color: #3e5c57;">Each one of them having their own special ability!🧪</span>
-        <img src="PotionsPreview.png" alt="PotionsPreview.png">
+  <section>
+    <h2>Changelog</h2>
+    <ul>
+      <h3>4 New Potion Jokers</h3>
+      <span style="font-size:16px;color:#3e5c57;">Each one of them having their own special ability!🧪</span>
+      <img src="PotionsPreview.png" alt="PotionsPreview.png">
+    </ul>
+  </section>
+</main>
 
-        <li>Joker^3</li>
-        <span style="font-size: 16px; color: #3e5c57;">I wonder what it does🤔</span>
-        <img src="Joker3Preview.png" alt="Joker3Preview.png" style="width: 30%; height: auto; display: block; margin: 20px auto;">
+<div class="right-sidebar">
+  <h3>Mod Stats</h3>
+  <a class="stat-item" href="#"><strong>Mod Age:</strong><br> <span id="mod-age">Calculating...</span></a>
+  <a class="stat-item" href="#"><strong>Jokers:</strong> <span id="joker-count">36</span></a>
+</div>
 
-        <li>Jokers Sprite Overhaul</li>
-        <span style="font-size: 16px; color: #3e5c57;">If they weren't good enough already✏️</span>
-        <img src="JokersOverhaulPreview.png" alt="JokersOverhaulPreview.png" width="2940" height="456" style="display: block; margin: 20px auto; max-width: 100%; height: auto;">
-      </ul>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+const nextUpdate = Date.UTC(2026, 1, 1, 22, 0, 0);
+const timerEl = document.getElementById("timer");
+const countdownEl = document.getElementById("countdown");
 
-      <h2>Bug Fixes</h2>
-      <ul style="font-family: 'Montserrat', sans-serif; font-size: 16px; color: #2f3e3d;">
-        <li><strong>Orange Potion Bug:</strong> Fixed Orange Potion not granting the player Hand Size</li>
-        <li><strong>Omega Potion Bug:</strong> Fixed Omega Potion not granting the player Orange Potion's Hand Size</li>
-      </ul>
-    </section>
+function updateCountdown() {
+  const now = new Date().getTime();
+  const distance = nextUpdate - now;
+  if(distance<=0){
+    timerEl.innerHTML="Update Released!";
+    confetti({ particleCount: 200, spread: 100, origin:{y:0.6}});
+    clearInterval(countdownInterval);
+    return;
+  }
+  const days=Math.floor(distance/(1000*60*60*24));
+  const hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+  const minutes=Math.floor((distance%(1000*60*60))/(1000*60));
+  const seconds=Math.floor((distance%(1000*60))/1000);
+  timerEl.innerHTML=`${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+const countdownInterval=setInterval(updateCountdown,1000);
+updateCountdown();
+countdownEl.addEventListener("click",()=>{confetti({particleCount:100,spread:70,origin:{y:0.6}});});
 
-    <section>
-      <h2>Download</h2>
-      <p><a href="#">[WIP] Click here to download the mod [WIP]</a></p>
-    </section>
+// Mod age
+const releaseDate=new Date('2025-07-24T21:10:00');
+const modAgeEl=document.getElementById('mod-age');
+function updateModAge(){
+  const now=new Date();
+  const diff=now-releaseDate;
+  const days=Math.floor(diff/(1000*60*60*24));
+  const hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+  const minutes=Math.floor((diff%(1000*60*60))/(1000*60));
+  const seconds=Math.floor((diff%(1000*60))/1000);
+  modAgeEl.innerHTML=`${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+updateModAge();
+setInterval(updateModAge,1000);
 
-    <footer>
-      &copy; 2026 Deer's Jokers. All rights reserved.
-    </footer>
-  </main>
+// Falling bars
+const barsContainer=document.querySelector('.falling-bars');
+const NUM_BARS=30;
+const bars=[];
+for(let i=0;i<NUM_BARS;i++){
+  const bar=document.createElement('div');
+  bar.classList.add('falling-bar');
+  bar.x=Math.random()*window.innerWidth;
+  bar.y=Math.random()*window.innerHeight;
+  bar.speed=0.8; // constant linear speed
+  bar.style.left=bar.x+'px';
+  bar.style.top=bar.y+'px';
+  bar.isDragging=false;
 
+  // drag
+  bar.addEventListener('mousedown',e=>{
+    bar.isDragging=true;
+    bar.offsetX=e.clientX-bar.x;
+    bar.offsetY=e.clientY-bar.y;
+    bar.style.cursor='grabbing';
+    bar.style.boxShadow='0 0 20px rgba(255,200,0,0.9)';
+  });
+  document.addEventListener('mousemove',e=>{
+    if(bar.isDragging){
+      bar.x=e.clientX-bar.offsetX;
+      bar.y=e.clientY-bar.offsetY;
+      bar.style.left=bar.x+'px';
+      bar.style.top=bar.y+'px';
+    }
+  });
+  document.addEventListener('mouseup',()=>{
+    if(bar.isDragging){
+      bar.isDragging=false;
+      bar.style.cursor='grab';
+      bar.style.boxShadow='0 0 10px rgba(74,124,89,0.6)';
+    }
+  });
+
+  barsContainer.appendChild(bar);
+  bars.push(bar);
+}
+
+function animateBars(){
+  for(const bar of bars){
+    if(!bar.isDragging){
+      bar.y+=bar.speed;
+      if(bar.y>window.innerHeight){bar.y=-100; bar.x=Math.random()*window.innerWidth; bar.style.left=bar.x+'px';}
+      bar.style.top=bar.y+'px';
+    }
+  }
+  requestAnimationFrame(animateBars);
+}
+animateBars();
+</script>
 </body>
 </html>
