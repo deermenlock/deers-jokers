@@ -18,33 +18,54 @@
       display: flex;
     }
 
-    /* Sidebars */
-    .sidebar, .right-sidebar {
+    /* Left Sidebar */
+    .sidebar {
       width: 200px;
+      background-color: #bfcec6;
       padding: 20px;
-      height: 100vh;
-      position: fixed;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
       box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      text-align: left;
       overflow-y: auto;
     }
-
-    .sidebar { left: 0; background-color: #bfcec6; }
-    .right-sidebar { right: 0; background: linear-gradient(to bottom, #4a7c59, #bfcec6, #a3c1ad); background-size: 100% 300%; animation: gradientMove 10s ease-in-out infinite alternate; box-shadow: -2px 0 5px rgba(0,0,0,0.1); }
-
-    @keyframes gradientMove {
-      0% { background-position: 0% 0%; }
-      100% { background-position: 0% 100%; }
-    }
-
-    .sidebar h3, .right-sidebar h3 { text-align: center; font-family: 'Baloo 2', cursive; font-size: 22px; margin-top: 0; }
-    .sidebar a, .right-sidebar .stat-item { display: block; padding: 10px; border-radius: 8px; font-weight: 600; text-decoration: none; color: #2f3e3d; }
+    .sidebar h3 { text-align: center; font-family: 'Baloo 2', cursive; font-size: 22px; margin-top: 0; }
+    .sidebar a { display: block; padding: 10px; background-color: #a3c1ad; color: #2f3e3d; text-decoration: none; border-radius: 8px; font-weight: 600; }
     .sidebar a:hover { background-color: #8bb49b; }
     .sidebar a.current { outline: 3px solid #4a7c59; background-color: #c4d8c4; font-weight: 700; box-shadow: 0 0 8px rgba(74,124,89,0.6); }
+    .sidebar a.coming-soon { background-color: #d1d1d1; color: #888; cursor: not-allowed; pointer-events: none; }
+
+    /* Countdown Timer */
     #countdown { margin-top: auto; text-align: center; padding: 25px; background-color: #a3c1ad; border-radius: 25px; font-weight: 600; cursor: pointer; }
 
+    /* Right Sidebar */
+    .right-sidebar {
+      width: 220px;
+      background: linear-gradient(to bottom, #4a7c59, #bfcec6, #a3c1ad);
+      background-size: 100% 300%;
+      animation: gradientMove 10s ease-in-out infinite alternate;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      right: 0;
+      box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+      text-align: left;
+      overflow-y: auto;
+    }
+    @keyframes gradientMove { 0%{background-position:0% 0%}100%{background-position:0% 100%} }
+    .right-sidebar h3 { margin-top:0; font-family:'Baloo 2',cursive; font-size:22px; text-align:center; }
+    .right-sidebar .stat-item { display:block; padding:10px; background-color:#a3c1ad; color:#2f3e3d; text-decoration:none; border-radius:8px; font-weight:600; pointer-events:none; }
+
+    /* Main Content */
     main {
       position: relative;
       width: calc(100% - 440px);
@@ -52,15 +73,14 @@
       margin: 0 auto;
       padding: 40px 20px;
     }
-
     header {
       background-color: #a3c1ad;
       padding: 40px 20px;
       text-align: center;
+      width: 100%;
       border-radius: 12px;
       margin-bottom: 20px;
     }
-
     header h1 { font-family: 'Baloo 2', cursive; font-size: 48px; margin: 0; color: #2f3e3d; }
     header h2 { font-size: 20px; margin-top: 10px; color: #2f3e3d; }
 
@@ -75,25 +95,22 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.15);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
     section:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.2); }
-    section ul { text-align: left; padding-left: 20px; display: inline-block; }
-
+    section ul { text-align:left; padding-left:20px; display:inline-block; }
     h2 { font-family: 'Baloo 2', cursive; font-size: 32px; margin-bottom: 15px; color: #3e5c57; }
     li { margin-bottom: 10px; line-height: 1.5; }
-    img { width: 100%; max-width: 600px; display: block; margin: 20px auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    img { width: 100%; max-width: 600px; display: block; margin: 20px auto; border-radius:12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-    footer { text-align: center; padding: 20px; font-size: 14px; color: #556b63; width: 100%; }
-    a { color: #4a7c59; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    footer { text-align:center; padding:20px; font-size:14px; color:#556b63; width:100%; }
+    a { color:#4a7c59; text-decoration:none; }
+    a:hover { text-decoration:underline; }
 
-    /* Falling bars */
-    .falling-bars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: auto; overflow: hidden; z-index: 0; }
-    .falling-bar { position: absolute; width: 5px; height: 100px; background: rgba(74,124,89,0.3); border-radius: 2px; cursor: grab; box-shadow: 0 0 10px rgba(74,124,89,0.6); }
+    /* Falling Bars */
+    .falling-bars { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:auto; overflow:hidden; z-index:0; }
+    .falling-bar { position:absolute; width:5px; height:100px; background:rgba(74,124,89,0.3); border-radius:2px; cursor:grab; box-shadow:0 0 10px rgba(74,124,89,0.6); }
   </style>
 </head>
 <body>
-
 <div class="falling-bars"></div>
 
 <div class="sidebar">
@@ -119,31 +136,53 @@
       <h3>4 New Potion Jokers</h3>
       <span style="font-size:16px;color:#3e5c57;">Each one of them having their own special ability!🧪</span>
       <img src="PotionsPreview.png" alt="PotionsPreview.png">
+
+      <h3>Joker^3</h3>
+      <span style="font-size:16px;color:#3e5c57;">I wonder what it does🤔</span>
+      <img src="Joker3Preview.png" alt="Joker3Preview.png" style="width:30%; height:auto; margin:20px auto; display:block;">
+
+      <h3>Jokers Sprite Overhaul</h3>
+      <span style="font-size:16px;color:#3e5c57;">If they weren't good enough already✏️</span>
+      <img src="JokersOverhaulPreview.png" alt="JokersOverhaulPreview.png" style="display:block; margin:20px auto; max-width:100%; height:auto;">
+
+      <h3>Bug Fixes</h3>
+      <ul style="font-family:'Montserrat',sans-serif; font-size:16px; color:#2f3e3d;">
+        <li><strong>Orange Potion Bug:</strong> Fixed Orange Potion not granting the player Hand Size</li>
+        <li><strong>Omega Potion Bug:</strong> Fixed Omega Potion not granting the player Orange Potion's Hand Size</li>
+      </ul>
     </ul>
   </section>
+
+  <section>
+    <h2>Download</h2>
+    <p><a href="#">[WIP] Click here to download the mod [WIP]</a></p>
+  </section>
+
+  <footer>&copy; 2026 Deer's Jokers. All rights reserved.</footer>
 </main>
 
 <div class="right-sidebar">
   <h3>Mod Stats</h3>
   <a class="stat-item" href="#"><strong>Mod Age:</strong><br> <span id="mod-age">Calculating...</span></a>
   <a class="stat-item" href="#"><strong>Jokers:</strong> <span id="joker-count">36</span></a>
+  <a class="stat-item" href="#"><strong>Enhancements:</strong> <span id="enhancement-count">1</span></a>
+  <a class="stat-item" href="#"><strong>Seals:</strong> <span id="seal-count">2</span></a>
+  <a class="stat-item" href="#"><strong>Tarots:</strong> <span id="tarot-count">2</span></a>
+  <a class="stat-item" href="#"><strong>Spectrals:</strong> <span id="spectral-count">2</span></a>
+  <a class="stat-item" href="#"><strong>Planets:</strong> <span id="planet-count">2</span></a>
+  <a class="stat-item" href="#"><strong>Booster Packs:</strong> <span id="boosterpack-count">3</span></a>
+  <a class="stat-item" href="#"><strong>Decks:</strong> <span id="Deck-count">8</span></a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
-const nextUpdate = Date.UTC(2026, 1, 1, 22, 0, 0);
+const nextUpdate = Date.UTC(2026,1,1,22,0,0);
 const timerEl = document.getElementById("timer");
 const countdownEl = document.getElementById("countdown");
-
-function updateCountdown() {
-  const now = new Date().getTime();
-  const distance = nextUpdate - now;
-  if(distance<=0){
-    timerEl.innerHTML="Update Released!";
-    confetti({ particleCount: 200, spread: 100, origin:{y:0.6}});
-    clearInterval(countdownInterval);
-    return;
-  }
+function updateCountdown(){
+  const now=new Date().getTime();
+  const distance=nextUpdate-now;
+  if(distance<=0){ timerEl.innerHTML="Update Released!"; confetti({particleCount:200,spread:100,origin:{y:0.6}}); clearInterval(countdownInterval); return; }
   const days=Math.floor(distance/(1000*60*60*24));
   const hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
   const minutes=Math.floor((distance%(1000*60*60))/(1000*60));
@@ -178,12 +217,12 @@ for(let i=0;i<NUM_BARS;i++){
   bar.classList.add('falling-bar');
   bar.x=Math.random()*window.innerWidth;
   bar.y=Math.random()*window.innerHeight;
-  bar.speed=0.8; // constant linear speed
+  bar.speed=0.8;
   bar.style.left=bar.x+'px';
   bar.style.top=bar.y+'px';
   bar.isDragging=false;
 
-  // drag
+  // Drag
   bar.addEventListener('mousedown',e=>{
     bar.isDragging=true;
     bar.offsetX=e.clientX-bar.x;
@@ -192,19 +231,10 @@ for(let i=0;i<NUM_BARS;i++){
     bar.style.boxShadow='0 0 20px rgba(255,200,0,0.9)';
   });
   document.addEventListener('mousemove',e=>{
-    if(bar.isDragging){
-      bar.x=e.clientX-bar.offsetX;
-      bar.y=e.clientY-bar.offsetY;
-      bar.style.left=bar.x+'px';
-      bar.style.top=bar.y+'px';
-    }
+    if(bar.isDragging){ bar.x=e.clientX-bar.offsetX; bar.y=e.clientY-bar.offsetY; bar.style.left=bar.x+'px'; bar.style.top=bar.y+'px'; }
   });
   document.addEventListener('mouseup',()=>{
-    if(bar.isDragging){
-      bar.isDragging=false;
-      bar.style.cursor='grab';
-      bar.style.boxShadow='0 0 10px rgba(74,124,89,0.6)';
-    }
+    if(bar.isDragging){ bar.isDragging=false; bar.style.cursor='grab'; bar.style.boxShadow='0 0 10px rgba(74,124,89,0.6)'; }
   });
 
   barsContainer.appendChild(bar);
@@ -215,7 +245,7 @@ function animateBars(){
   for(const bar of bars){
     if(!bar.isDragging){
       bar.y+=bar.speed;
-      if(bar.y>window.innerHeight){bar.y=-100; bar.x=Math.random()*window.innerWidth; bar.style.left=bar.x+'px';}
+      if(bar.y>window.innerHeight){ bar.y=-100; bar.x=Math.random()*window.innerWidth; bar.style.left=bar.x+'px'; }
       bar.style.top=bar.y+'px';
     }
   }
@@ -223,5 +253,6 @@ function animateBars(){
 }
 animateBars();
 </script>
+
 </body>
 </html>
